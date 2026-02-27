@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instruction Format | TechPedia</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Hero ── */
+    .page-hero-wrap {
+      position: relative; overflow: hidden;
+      background: var(--burgundy); min-height: 280px;
+      display: flex; align-items: flex-end;
+    }
+    .hero-banner {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.25) saturate(0.5); z-index: 0;
+    }
+    .page-hero-wrap::after {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(56,15,23,0.2) 0%, rgba(37,43,43,1) 100%);
+    }
+    .page-hero-wrap .page-hero { position: relative; z-index: 2; width: 100%; }
+
+    /* ── CISC vs RISC compare ── */
+    .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+    .arch-card {
+      border-radius: 20px; padding: 24px;
+      border: 1.5px solid;
+    }
+    .arch-card.cisc { background: rgba(143,11,19,0.18); border-color: rgba(143,11,19,0.4); }
+    .arch-card.risc { background: rgba(76,79,84,0.35);  border-color: rgba(239,223,197,0.2); }
+    .arch-card-title {
+      font-family: var(--font-display); font-size: 1rem;
+      font-weight: 900; margin-bottom: 12px;
+    }
+    .arch-card.cisc .arch-card-title { color: var(--crimson); }
+    .arch-card.risc .arch-card-title { color: var(--cream); }
+
+    /* ── Instruction format diagram ── */
+    .instr-diagram {
+      display: flex; gap: 4px; flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .instr-field {
+      flex: 1; min-width: 70px;
+      background: rgba(143,11,19,0.22);
+      border: 1px solid rgba(143,11,19,0.45);
+      border-radius: 10px; padding: 14px 10px;
+      text-align: center; transition: background 0.3s;
+    }
+    .instr-field:hover { background: rgba(143,11,19,0.38); }
+    .instr-field-name {
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--crimson); letter-spacing: 1px;
+      display: block; margin-bottom: 4px;
+      font-family: var(--font-mono);
+    }
+    .instr-field-bits { font-size: 0.65rem; color: rgba(239,223,197,0.45); }
+    .instr-field-desc { font-size: 0.7rem; color: rgba(239,223,197,0.6); margin-top: 4px; display: block; }
+
+    /* ── Flowchart ── */
+    .flowchart {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+      margin: 24px auto; max-width: 520px;
+    }
+    .flow-node {
+      width: 100%;
+      background: rgba(143,11,19,0.22);
+      border: 1.5px solid rgba(143,11,19,0.45);
+      border-radius: 14px; padding: 13px 20px;
+      text-align: center;
+      font-family: var(--font-body); font-size: 0.92rem;
+      color: var(--cream); font-weight: 500;
+      transition: background 0.3s;
+    }
+    .flow-node:hover { background: rgba(143,11,19,0.38); }
+    .flow-node.start, .flow-node.end {
+      background: rgba(56,15,23,0.7);
+      border-color: var(--crimson);
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .flow-node.decision {
+      background: rgba(76,79,84,0.5);
+      border-color: rgba(239,223,197,0.25);
+      font-style: italic;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      padding: 28px 24px;
+      font-size: 0.85rem;
+    }
+    .flow-arrow {
+      width: 2px; height: 26px;
+      background: linear-gradient(to bottom, rgba(143,11,19,0.6), rgba(143,11,19,0.2));
+      position: relative;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .flow-arrow::after {
+      content: '▼'; position: absolute; bottom: -6px;
+      color: rgba(143,11,19,0.7); font-size: 0.68rem;
+    }
+
+    /* ── Pro/Con ── */
+    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .pro-list, .con-list { border-radius: 14px; padding: 12px 16px; }
+    .pro-list { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22); }
+    .con-list { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.18); }
+    .pro-list li, .con-list li { font-size: 0.86rem; margin-bottom: 5px; }
+    .pro-list li { color: #6ee7b7; } .pro-list li::marker { content: "✓  "; }
+    .con-list li { color: #fca5a5; } .con-list li::marker { content: "✗  "; }
+
+    /* ── ALU diagram ── */
+    .alu-diagram {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap; margin: 24px 0;
+    }
+    .alu-input {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .alu-box {
+      background: rgba(143,11,19,0.25);
+      border: 1.5px solid rgba(143,11,19,0.5);
+      border-radius: 14px; padding: 10px 18px;
+      font-family: var(--font-mono); font-size: 0.88rem;
+      color: var(--cream); text-align: center; min-width: 90px;
+    }
+    .alu-main {
+      background: rgba(56,15,23,0.7);
+      border: 2px solid var(--crimson);
+      border-radius: 20px; padding: 24px 32px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(143,11,19,0.35);
+    }
+    .alu-main-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 900; color: var(--cream); display: block; }
+    .alu-main-sub   { font-size: 0.75rem; color: rgba(239,223,197,0.5); letter-spacing: 2px; text-transform: uppercase; }
+    .alu-arrow { font-size: 1.4rem; color: rgba(143,11,19,0.7); }
+
+    @media (max-width: 768px) {
+      .arch-grid { grid-template-columns: 1fr; }
+      .pro-con   { grid-template-columns: 1fr; }
+      .flow-node.decision { clip-path: none; padding: 14px 20px; }
+      .alu-diagram { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="storage.html">Storage Devices</a></li>
+      <li><a href="instruction.html">Instruction Format</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <nav class="nav-mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="storage.html">Storage Devices</a>
+    <a href="instruction.html">Instruction Format</a>
+    <a href="feedback.html">Feedback</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- HERO -->
+    <div class="page-hero-wrap">
+      <img class="hero-banner"
+        src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80"
+        alt="CPU circuit board"/>
+      <div class="page-hero">
+        <div class="section-tag">Topic 02</div>
+        <h1>Instruction <span class="accent">Format</span></h1>
+        <p style="max-width:580px; margin-top:12px; color:rgba(239,223,197,0.72);">
+          The fundamental language of CPUs — how machine instructions are structured, decoded, and executed at the hardware level.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- ═══════════════════════════════════
+           FETCH–DECODE–EXECUTE FLOWCHART
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:48px;">
+        <div class="section-tag">Flowchart</div>
+        <h2>The Fetch–Decode–<span class="accent">Execute</span> Cycle</h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">How a CPU processes every instruction</span>
+        <p style="color:rgba(239,223,197,0.65); font-size:0.92rem; margin-bottom:4px;">
+          Every instruction goes through this repeating cycle — the heartbeat of every CPU, running billions of times per second.
+        </p>
+
+        <div class="flowchart">
+          <div class="flow-node start">🔄 CPU Cycle Begins</div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">
+            <strong>FETCH</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Program Counter (PC) points to next instruction in memory. Instruction copied into Instruction Register (IR).</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">
+            <strong>DECODE</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Control Unit reads the opcode field. Determines what operation to perform and where the operands are.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">
+            <strong>FETCH OPERANDS</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Data is retrieved from registers or memory based on the addressing mode.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">
+            <strong>EXECUTE</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">ALU performs the operation (ADD, SUB, AND…). Flags are updated (Zero, Carry, Overflow).</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">
+            <strong>WRITE BACK</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Result is stored back into a register or memory location.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node">PC incremented to point to next instruction</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node start">🔄 Cycle Repeats</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           INSTRUCTION SET TYPES
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 01</div>
+        <h2>Instruction Set <span class="accent">Types</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">CISC vs RISC — Two Design Philosophies</span>
+        <p>
+          The <strong>Instruction Set</strong> is the complete library of commands a CPU understands. There are two dominant design philosophies that have shaped modern computing:
+        </p>
+
+        <div class="arch-grid">
+          <div class="arch-card cisc">
+            <div class="arch-card-title">CISC</div>
+            <p style="font-size:0.78rem; color:var(--crimson); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Complex Instruction Set Computer</p>
+            <p>CISC CPUs use a <strong>microcode layer</strong> — a hidden translator inside the chip. One complex instruction (like "Calculate and Store") is internally broken down into many tiny micro-operations. This makes writing programs easier but makes the hardware design very complex.</p>
+            <p><strong>Priority:</strong> Memory efficiency. Programs are shorter because one instruction does more work.</p>
+            <p style="margin-bottom:0;"><strong>Examples:</strong> Intel x86, AMD processors (used in most PCs and laptops)</p>
+          </div>
+          <div class="arch-card risc">
+            <div class="arch-card-title">RISC</div>
+            <p style="font-size:0.78rem; color:rgba(239,223,197,0.5); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Reduced Instruction Set Computer</p>
+            <p>RISC skips microcode and uses <strong>hard-wired logic</strong>. Every instruction is simple, uniform, and fixed in size. Because they are so simple, the CPU can <strong>pipeline</strong> them — starting the next instruction before the previous one has fully finished.</p>
+            <p><strong>Priority:</strong> Speed and power efficiency. Programs are longer but execute faster.</p>
+            <p style="margin-bottom:0;"><strong>Examples:</strong> ARM (smartphones, tablets, Apple M-series), MIPS</p>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin-top:20px;">
+          <strong>Enhanced Instruction Sets:</strong> Modern CPUs add "bonus" command sets for specific tasks — for example, Intel's <strong>MMX</strong> and <strong>SSE</strong> for multimedia processing, or <strong>AVX</strong> for AI and 3D rendering workloads.
+        </div>
+
+        <h4 style="color:var(--cream-mid); margin: 24px 0 12px;">CISC vs RISC at a Glance</h4>
+        <table class="data-table">
+          <thead><tr><th>Feature</th><th>CISC</th><th>RISC</th></tr></thead>
+          <tbody>
+            <tr><td>Instruction size</td><td>Variable length</td><td>Fixed length (e.g., 32-bit)</td></tr>
+            <tr><td>Instructions per task</td><td>Fewer (one does more)</td><td>More (each does less)</td></tr>
+            <tr><td>Hardware complexity</td><td>Very complex</td><td>Simpler</td></tr>
+            <tr><td>Pipelining efficiency</td><td>Harder</td><td>Very efficient</td></tr>
+            <tr><td>Power consumption</td><td>Higher</td><td>Lower</td></tr>
+            <tr><td>Common use</td><td>Desktop / server CPUs</td><td>Mobile / embedded / modern SoCs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           COMPONENTS OF AN INSTRUCTION
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 02</div>
+        <h2>Components of an <span class="accent">Instruction</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">What's inside a machine instruction?</span>
+        <p>Every machine instruction is a string of binary bits divided into functional <strong>fields</strong>, each playing a specific role:</p>
+
+        <div class="grid-2" style="gap:16px; margin:20px 0;">
+          <div class="blob-card">
+            <h4 style="color:var(--crimson); margin-bottom:6px;">Opcode — "The What"</h4>
+            <p style="margin-bottom:0; font-size:0.9rem;">Specifies the operation to perform — ADD, SUB, LOAD, STORE, JUMP. An n-bit opcode allows 2ⁿ unique operations.</p>
+          </div>
+          <div class="blob-card">
+            <h4 style="color:var(--crimson); margin-bottom:6px;">Operand — "The Who"</h4>
+            <p style="margin-bottom:0; font-size:0.9rem;">Specifies the data to work with or the address where the data lives. Could be a register number, a memory address, or a constant value.</p>
+          </div>
+          <div class="blob-card">
+            <h4 style="color:var(--crimson); margin-bottom:6px;">Addressing Mode — "The How"</h4>
+            <p style="margin-bottom:0; font-size:0.9rem;">Tells the CPU how to interpret the operand — is the data right here in the instruction, or does the CPU need to look it up in memory?</p>
+          </div>
+          <div class="blob-card">
+            <h4 style="color:var(--crimson); margin-bottom:6px;">Flags — "The Status"</h4>
+            <p style="margin-bottom:0; font-size:0.9rem;">Status bits updated after execution. Zero Flag (result = 0), Carry Flag (overflow), Negative Flag — used for conditional branching.</p>
+          </div>
+        </div>
+
+        <!-- 32-bit RISC instruction layout -->
+        <h4 style="color:var(--cream-mid); margin: 20px 0 12px;">32-Bit RISC Instruction Layout (MIPS R-Type)</h4>
+        <div class="instr-diagram">
+          <div class="instr-field">
+            <span class="instr-field-name">OPCODE</span>
+            <span class="instr-field-bits">6 bits</span>
+            <span class="instr-field-desc">Operation type</span>
+          </div>
+          <div class="instr-field">
+            <span class="instr-field-name">RS</span>
+            <span class="instr-field-bits">5 bits</span>
+            <span class="instr-field-desc">Source register 1</span>
+          </div>
+          <div class="instr-field">
+            <span class="instr-field-name">RT</span>
+            <span class="instr-field-bits">5 bits</span>
+            <span class="instr-field-desc">Source register 2</span>
+          </div>
+          <div class="instr-field">
+            <span class="instr-field-name">RD</span>
+            <span class="instr-field-bits">5 bits</span>
+            <span class="instr-field-desc">Destination register</span>
+          </div>
+          <div class="instr-field">
+            <span class="instr-field-name">SHAMT</span>
+            <span class="instr-field-bits">5 bits</span>
+            <span class="instr-field-desc">Shift amount</span>
+          </div>
+          <div class="instr-field">
+            <span class="instr-field-name">FUNC</span>
+            <span class="instr-field-bits">6 bits</span>
+            <span class="instr-field-desc">Function code</span>
+          </div>
+        </div>
+        <p style="font-size:0.82rem; color:rgba(239,223,197,0.5); margin-top:8px;">
+          Total = 6+5+5+5+5+6 = <strong style="color:var(--cream);">32 bits</strong>. RISC instructions are always fixed at 32 bits — like a post office where every parcel is exactly the same size, making sorting (decoding) much faster.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           ADDRESS FORMATS
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 03</div>
+        <h2>Instruction <span class="accent">Address Formats</span></h2>
+      </div>
+
+      <!-- Zero Address -->
+      <div class="card reveal">
+        <span class="card-label">Format 1</span>
+        <h3>Zero-Address Instructions</h3>
+        <div class="grid-2" style="gap:24px; align-items:start; margin-top:14px;">
+          <div>
+            <p>Zero-address instructions have <strong>no explicit operands</strong>. Instead, they rely entirely on a <strong>Stack</strong> — a "Last-In, First-Out" data structure.</p>
+            <p>Think of it like a stack of plates: you PUSH values on top, and operations like ADD automatically take the top two, compute the result, and push it back. No address needs to be specified because the stack's top is always the implicit operand.</p>
+            <p><strong>Common commands:</strong> PUSH, POP, ADD, SUB, MUL</p>
+            <p><strong>Used in:</strong> Java Virtual Machine (JVM), HP calculators</p>
+          </div>
+          <div>
+            <div class="blob-card">
+              <h4 style="color:var(--cream-mid); margin-bottom:10px;">Example — compute C = A + B</h4>
+              <code style="display:block; line-height:2.1; background:transparent; padding:0; font-size:0.9rem;">
+                PUSH A &nbsp;→ Stack: [A]<br/>
+                PUSH B &nbsp;→ Stack: [B, A]<br/>
+                ADD &nbsp;&nbsp;&nbsp;→ Stack: [A+B]<br/>
+                POP C &nbsp;&nbsp;→ C = A + B
+              </code>
+            </div>
+            <div class="pro-con" style="margin-top:14px;">
+              <ul class="pro-list"><li>Very compact instructions</li><li>Simple hardware</li></ul>
+              <ul class="con-list"><li>Many instructions needed</li><li>Hard to optimise</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- One Address -->
+      <div class="card reveal">
+        <span class="card-label">Format 2</span>
+        <h3>One-Address Instructions</h3>
+        <div class="grid-2" style="gap:24px; align-items:start; margin-top:14px;">
+          <div>
+            <p>One explicit operand is named. The second operand is always implicitly in the <strong>Accumulator register (ACC)</strong> — the CPU's dedicated "workspace" or scratchpad for arithmetic.</p>
+            <p>Every arithmetic operation reads one value from the ACC and one from the named operand, then stores the result back in the ACC. A STORE instruction writes the ACC value to memory.</p>
+            <p><strong>Used in:</strong> Early microprocessors (Intel 8080, Zilog Z80)</p>
+          </div>
+          <div>
+            <div class="blob-card">
+              <h4 style="color:var(--cream-mid); margin-bottom:10px;">Example — compute C = A + B</h4>
+              <code style="display:block; line-height:2.1; background:transparent; padding:0; font-size:0.9rem;">
+                LOAD A &nbsp;→ ACC = Mem[A]<br/>
+                ADD B &nbsp;&nbsp;→ ACC = ACC + Mem[B]<br/>
+                STORE C → Mem[C] = ACC
+              </code>
+            </div>
+            <div class="pro-con" style="margin-top:14px;">
+              <ul class="pro-list"><li>Simple hardware design</li><li>Clear program flow</li></ul>
+              <ul class="con-list"><li>Many memory accesses</li><li>ACC is a bottleneck</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Address -->
+      <div class="card reveal">
+        <span class="card-label">Format 3</span>
+        <h3>Two-Address Instructions</h3>
+        <div class="grid-2" style="gap:24px; align-items:start; margin-top:14px;">
+          <div>
+            <p>Both the <strong>source</strong> and the <strong>destination</strong> are explicitly named. This is the most common format in traditional computing (CISC). The first address acts as both an input and the final destination — it is overwritten by the result.</p>
+            <p>This provides a good balance between flexibility and instruction size, which is why it is widely used in x86 architecture.</p>
+            <p><strong>Used in:</strong> Intel x86, AMD64 (your PC or laptop)</p>
+          </div>
+          <div>
+            <div class="blob-card">
+              <h4 style="color:var(--cream-mid); margin-bottom:10px;">Example — compute C = A + B</h4>
+              <code style="display:block; line-height:2.1; background:transparent; padding:0; font-size:0.9rem;">
+                MOV R1, A &nbsp;→ R1 = Mem[A]<br/>
+                ADD R1, B &nbsp;→ R1 = R1 + Mem[B]<br/>
+                MOV C, R1 → Mem[C] = R1
+              </code>
+            </div>
+            <div class="pro-con" style="margin-top:14px;">
+              <ul class="pro-list"><li>Flexible &amp; powerful</li><li>Fewer instructions than 0/1-addr</li></ul>
+              <ul class="con-list"><li>First operand is overwritten</li><li>Complex decoder needed</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three Address -->
+      <div class="card reveal">
+        <span class="card-label">Format 4</span>
+        <h3>Three-Address Instructions</h3>
+        <div class="grid-2" style="gap:24px; align-items:start; margin-top:14px;">
+          <div>
+            <p>Two source registers and one <strong>separate destination register</strong> are all explicitly named. No operand is overwritten — the original values are preserved. This is the preferred format for RISC architectures.</p>
+            <p>Because instructions are fixed-size and simple, the CPU can easily pipeline them: while one instruction executes, the next is already being decoded.</p>
+            <p><strong>Used in:</strong> MIPS, ARM (smartphones, Apple M1/M2/M3), RISC-V</p>
+          </div>
+          <div>
+            <div class="blob-card">
+              <h4 style="color:var(--cream-mid); margin-bottom:10px;">Example — MIPS/ARM style</h4>
+              <code style="display:block; line-height:2.1; background:transparent; padding:0; font-size:0.9rem;">
+                ADD R1, R2, R3 → R1 = R2 + R3<br/>
+                SUB R4, R1, R5 → R4 = R1 − R5<br/>
+                MUL R6, R4, R2 → R6 = R4 × R2
+              </code>
+            </div>
+            <div class="pro-con" style="margin-top:14px;">
+              <ul class="pro-list"><li>Operands are preserved</li><li>Ideal for pipelining</li><li>Clear &amp; readable</li></ul>
+              <ul class="con-list"><li>Wider instruction word</li><li>Longer programs</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address format flowchart -->
+      <div class="card reveal">
+        <span class="card-label">Flowchart — Choosing an Address Format</span>
+        <div class="flowchart">
+          <div class="flow-node start">⚙️ CPU needs to execute an operation</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">Are operands named in the instruction?</div>
+          <div class="flow-arrow"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; margin:4px 0;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <div class="flow-node" style="font-size:0.8rem; padding:10px; text-align:center;"><strong>No</strong><br/>→ Stack used implicitly<br/><span style="color:rgba(239,223,197,0.5); font-size:0.75rem;">Zero-Address</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <div class="flow-node" style="font-size:0.8rem; padding:10px; text-align:center;"><strong>Yes</strong> — how many?</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow"></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; width:100%; margin:4px 0;">
+            <div class="flow-node" style="font-size:0.8rem; padding:10px; text-align:center;"><strong>1 operand</strong><br/>ACC is implicit<br/><span style="color:rgba(239,223,197,0.5); font-size:0.75rem;">One-Address</span></div>
+            <div class="flow-node" style="font-size:0.8rem; padding:10px; text-align:center;"><strong>2 operands</strong><br/>Src = Dest<br/><span style="color:rgba(239,223,197,0.5); font-size:0.75rem;">Two-Address (CISC)</span></div>
+            <div class="flow-node" style="font-size:0.8rem; padding:10px; text-align:center;"><strong>3 operands</strong><br/>2 src + 1 dest<br/><span style="color:rgba(239,223,197,0.5); font-size:0.75rem;">Three-Address (RISC)</span></div>
+          </div>
+
+          <div class="flow-arrow"></div>
+          <div class="flow-node start">✅ Result stored in register or memory</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           ALU
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 04</div>
+        <h2>The Arithmetic &amp; Logic <span class="accent">Unit (ALU)</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">The engine of the CPU</span>
+        <p>
+          The ALU is the computational core of every CPU. It performs all arithmetic and logical operations. Every instruction that involves calculation or comparison passes through the ALU.
+        </p>
+
+        <!-- ALU Diagram -->
+        <div class="alu-diagram">
+          <div class="alu-input">
+            <div class="alu-box">Operand A<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.4);">from RS register</span></div>
+            <div class="alu-box" style="margin-top:12px;">Operand B<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.4);">from RT register</span></div>
+          </div>
+          <div class="alu-arrow">→</div>
+          <div class="alu-main">
+            <span class="alu-main-title">ALU</span>
+            <span class="alu-main-sub">Arithmetic &amp; Logic Unit</span>
+            <div style="margin-top:14px; display:flex; flex-direction:column; gap:6px;">
+              <div class="alu-box" style="font-size:0.75rem; padding:6px 12px;">ADD / SUB / MUL / DIV</div>
+              <div class="alu-box" style="font-size:0.75rem; padding:6px 12px;">AND / OR / NOT / XOR</div>
+              <div class="alu-box" style="font-size:0.75rem; padding:6px 12px;">Shift Left / Shift Right</div>
+            </div>
+          </div>
+          <div class="alu-arrow">→</div>
+          <div class="alu-input">
+            <div class="alu-box">Result Y<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.4);">to RD register</span></div>
+            <div class="alu-box" style="margin-top:12px;">Status Flags<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.4);">Zero · Carry · Overflow</span></div>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin-top:8px;">
+          <strong>Status Flags explained:</strong> After every ALU operation, flag bits are updated.
+          The <strong>Zero Flag</strong> is set when the result is 0 — allowing the CPU to make decisions like "if result is zero, jump to a different instruction."
+          The <strong>Carry Flag</strong> is set when an addition overflows the register size.
+          The <strong>Overflow Flag</strong> signals a signed integer overflow.
+        </div>
+      </div>
+
+      <!-- Summary Table -->
+      <div class="card reveal">
+        <span class="card-label">Summary</span>
+        <h3>All Instruction Formats Compared</h3>
+        <table class="data-table" style="margin-top:14px;">
+          <thead>
+            <tr><th>Format</th><th>Operands</th><th>Implicit Register</th><th>Architecture</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Zero-address</strong></td><td>0</td><td>Stack (TOS)</td><td>JVM, stack-based</td><td><code>ADD</code></td></tr>
+            <tr><td><strong>One-address</strong></td><td>1</td><td>Accumulator</td><td>Early CPUs, Z80</td><td><code>ADD B</code></td></tr>
+            <tr><td><strong>Two-address</strong></td><td>2</td><td>None (dest = src1)</td><td>x86, CISC</td><td><code>ADD R1, R2</code></td></tr>
+            <tr><td><strong>Three-address</strong></td><td>3</td><td>None</td><td>MIPS, ARM, RISC</td><td><code>ADD R1, R2, R3</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider"/>
+
+      <!-- ═══════════════════════════════════
+           QUIZ
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal">
+        <div class="section-tag">Test Yourself</div>
+        <h2>Instruction Format <span class="accent">Quiz</span></h2>
+      </div>
+
+      <div class="quiz-section reveal">
+        <p style="color:rgba(239,223,197,0.65); margin-bottom:24px;">
+          7 questions based on the content above. Select an answer to see the explanation, then press Next.
+        </p>
+        <div id="instrQuiz"></div>
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:32px;" class="reveal">
+        <a href="storage.html" class="btn btn-outline">← Storage Devices</a>
+        <a href="feedback.html" class="btn btn-primary">Feedback →</a>
+      </div>
+
+    </div><!-- /content-area -->
+
+    <footer>
+      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a>
+      <ul class="foot-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="storage.html">Storage Devices</a></li>
+        <li><a href="instruction.html">Instruction Format</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+      </ul>
+      <p>© <span id="year"></span> TechPedia — Computer Science Micro Project</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    initQuiz('instrQuiz', [
+      {
+        question: "What is the main difference between CISC and RISC instruction sets?",
+        options: [
+          "CISC uses fixed-length instructions; RISC uses variable-length",
+          "CISC uses complex instructions via microcode; RISC uses simple hard-wired instructions",
+          "CISC is only used in smartphones; RISC is used in desktops",
+          "CISC supports pipelining; RISC does not"
+        ],
+        answer: 1,
+        explanation: "CISC uses a microcode layer to execute complex variable-length instructions. RISC uses simple, uniform, fixed-length instructions that can be efficiently pipelined."
+      },
+      {
+        question: "In the Fetch-Decode-Execute cycle, what happens during the FETCH stage?",
+        options: [
+          "The ALU performs the arithmetic operation",
+          "The CPU identifies the operands",
+          "The instruction is copied from memory into the Instruction Register",
+          "The result is written back to a register"
+        ],
+        answer: 2,
+        explanation: "During Fetch, the Program Counter (PC) points to the next instruction in memory and it is copied into the Instruction Register (IR) for decoding."
+      },
+      {
+        question: "What does the OPCODE field in an instruction specify?",
+        options: [
+          "The memory address of the result",
+          "The operation to be performed (e.g., ADD, SUB)",
+          "The addressing mode",
+          "The size of the instruction"
+        ],
+        answer: 1,
+        explanation: "The opcode (operation code) tells the CPU WHAT to do — add, subtract, load, store, jump, etc. An n-bit opcode supports 2ⁿ unique operations."
+      },
+      {
+        question: "In zero-address instructions, how are operands provided?",
+        options: [
+          "Directly embedded in the instruction",
+          "From the Accumulator register",
+          "Implicitly from the top of the stack",
+          "From two named registers"
+        ],
+        answer: 2,
+        explanation: "Zero-address instructions use a stack. Operands are implicitly at the Top of Stack (TOS) — no address needs to be specified in the instruction."
+      },
+      {
+        question: "Which real-world architecture uses three-address instructions and is found in most modern smartphones?",
+        options: ["Intel x86", "Zilog Z80", "ARM (RISC)", "Java Virtual Machine"],
+        answer: 2,
+        explanation: "ARM is a RISC architecture that uses three-address instructions (two source registers + one destination). It powers virtually all modern smartphones and Apple's M-series chips."
+      },
+      {
+        question: "What is the purpose of the Zero Flag in the ALU's status register?",
+        options: [
+          "It indicates the CPU is idle",
+          "It is set when the result of an operation is zero, enabling conditional jumps",
+          "It signals that a register has been cleared",
+          "It marks the end of a program"
+        ],
+        answer: 1,
+        explanation: "The Zero Flag is set to 1 when the ALU result is 0. This allows the CPU to make conditional decisions — e.g., 'if result is zero, jump to a different instruction.'"
+      },
+      {
+        question: "A 32-bit RISC instruction is divided into fixed-size fields. What is the size of the OPCODE field in a standard MIPS R-type instruction?",
+        options: ["4 bits", "5 bits", "6 bits", "8 bits"],
+        answer: 2,
+        explanation: "In MIPS R-type format, the opcode is 6 bits wide, supporting up to 2⁶ = 64 distinct operations. The full 32-bit instruction is split as: 6+5+5+5+5+6."
+      }
+    ]);
+  </script>
+</body>
+</html>
