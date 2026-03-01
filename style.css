@@ -523,7 +523,7 @@ code { font-family: var(--font-mono); font-size:0.85em; background: rgba(239,223
 .alert-error   { background:rgba(239,68,68,0.12);  border:1px solid rgba(239,68,68,0.3);  color:#fca5a5; }
 
 /* Star rating */
-.star-rating { display:flex; flex-direction:row-reverse; gap:5px; margin:6px 0; }
+.star-rating { display:flex; flex-direction:row; gap:5px; margin:6px 0; }
 .star-rating input { display:none; }
 .star-rating label { font-size:1.9rem; color:rgba(239,223,197,0.2); cursor:pointer; transition:all 0.2s; }
 .star-rating input:checked ~ label,
@@ -578,4 +578,5 @@ footer p { color:rgba(239,223,197,0.35); font-size:0.8rem; margin-bottom:4px; }
   h2 { font-size:1.5rem; }
   .nav-cards { grid-template-columns:1fr; }
   .grid-auto { grid-template-columns:1fr; }
+
 }
