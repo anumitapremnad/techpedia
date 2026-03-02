@@ -121,7 +121,6 @@
       background: rgba(76,79,84,0.5);
       border-color: rgba(239,223,197,0.3);
       border-radius: 8px;
-      transform: rotate(0deg);
       font-style: italic;
     }
     .flow-arrow {
@@ -135,14 +134,12 @@
       position: absolute; bottom: -6px;
       color: rgba(143,11,19,0.7); font-size: 0.7rem;
     }
-    .flow-label {
-      font-size: 0.68rem; letter-spacing: 2px;
-      color: rgba(239,223,197,0.4); text-transform: uppercase;
-      margin: 2px 0; text-align: center;
-    }
 
     /* ── Comparison table highlight ── */
     .highlight-row td { background: rgba(143,11,19,0.12) !important; }
+
+    /* ── Table scroll on mobile ── */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
     @media (max-width: 768px) {
       .fn-cards { grid-template-columns: 1fr 1fr; }
@@ -181,9 +178,7 @@
 
     <!-- HERO BANNER -->
     <div class="page-hero-wrap">
-      <img class="hero-banner"
-        src="images/magnetic-tape.jpg.png?w=1400&q=80"
-        alt="Storage devices banner"/>
+      <img class="hero-banner" src="images/magnetic-tape.jpg.png" alt="Storage devices banner"/>
       <div class="page-hero">
         <div class="section-tag">Topic 01</div>
         <h1>Secondary <span class="accent">Storage</span> Devices</h1>
@@ -195,9 +190,6 @@
 
     <div class="content-area">
 
-      <!-- ═══════════════════════════════════
-           SECTION 1 — DEFINITION
-           ═══════════════════════════════════ -->
       <div class="section-header reveal" style="margin-top:48px;">
         <div class="section-tag">Section 01</div>
         <h2>Definition &amp; Core <span class="accent">Characteristics</span></h2>
@@ -248,9 +240,6 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════
-           SECTION 2 — KEY FUNCTIONS
-           ═══════════════════════════════════ -->
       <div class="section-header reveal" style="margin-top:44px;">
         <div class="section-tag">Section 02</div>
         <h2>Key <span class="accent">Functions</span></h2>
@@ -277,9 +266,6 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════
-           HOW DATA IS STORED — FLOWCHART
-           ═══════════════════════════════════ -->
       <div class="section-header reveal" style="margin-top:44px;">
         <div class="section-tag">Flowchart</div>
         <h2>How Data Gets <span class="accent">Stored</span></h2>
@@ -294,25 +280,19 @@
         <div class="flowchart">
           <div class="flow-node start">🖥️ User Saves a File</div>
           <div class="flow-arrow"></div>
-
           <div class="flow-node">CPU receives save instruction</div>
           <div class="flow-arrow"></div>
-
           <div class="flow-node">Data is loaded into RAM (primary memory)</div>
           <div class="flow-arrow"></div>
-
           <div class="flow-node">OS calls the Storage Controller / Driver</div>
           <div class="flow-arrow"></div>
-
           <div class="flow-node decision">Which type of storage device?</div>
           <div class="flow-arrow"></div>
-
           <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; width:100%; margin:4px 0;">
             <div class="flow-node" style="font-size:0.8rem; padding:10px;">🧲 HDD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Magnetic head moves to sector</span></div>
             <div class="flow-node" style="font-size:0.8rem; padding:10px;">⚡ SSD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Data written to NAND flash cell</span></div>
             <div class="flow-node" style="font-size:0.8rem; padding:10px;">💿 Optical<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Laser burns pits on disc surface</span></div>
           </div>
-
           <div class="flow-arrow"></div>
           <div class="flow-node">Data encoded in binary and written to physical medium</div>
           <div class="flow-arrow"></div>
@@ -322,9 +302,6 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════
-           SECTION 3 — TYPES
-           ═══════════════════════════════════ -->
       <div class="section-header reveal" style="margin-top:44px;">
         <div class="section-tag">Section 03</div>
         <h2>Types of Secondary <span class="accent">Storage</span></h2>
@@ -365,32 +342,30 @@
 
           <div style="display:flex; flex-direction:column; gap:16px;">
             <div class="device-img-box">
-              <img src="images/hdd.jpg.png?w=600&q=85"
-                alt="Hard Disk Drive opened showing platters and read/write arm" loading="lazy"/>
+              <img src="images/hdd.jpg.png" alt="Hard Disk Drive" loading="lazy"/>
               <span class="img-label">Hard Disk Drive (HDD)</span>
             </div>
             <div class="device-img-box">
-              <img src="images/magnetic-tape.jpg.png?w=600&q=85"
-                alt="LTO Magnetic tape cartridges" loading="lazy"
-                style="filter:brightness(1.15) contrast(1.05);"/>
+              <img src="images/magnetic-tape.jpg.png" alt="Magnetic Tape" loading="lazy"/>
               <span class="img-label">Magnetic Tape (LTO Cartridge)</span>
             </div>
           </div>
         </div>
 
-        <!-- HDD Specs Table -->
         <h4 style="color:var(--cream-mid); margin: 24px 0 12px;">HDD — Key Specifications</h4>
-        <table class="data-table">
-          <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
-          <tbody>
-            <tr><td>Capacity</td><td>500 GB – 20 TB</td><td>Consumer to enterprise range</td></tr>
-            <tr><td>Read Speed</td><td>80 – 160 MB/s</td><td>Sequential read</td></tr>
-            <tr><td>Rotation Speed</td><td>5,400 – 7,200 RPM</td><td>Higher RPM = faster access</td></tr>
-            <tr><td>Interface</td><td>SATA, SAS</td><td>SATA for consumer, SAS for server</td></tr>
-            <tr><td>Access Time</td><td>~5 – 10 ms</td><td>Mechanical seek delay</td></tr>
-            <tr><td>Cost per GB</td><td>~$0.02 – $0.04</td><td>Very economical</td></tr>
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Capacity</td><td>500 GB – 20 TB</td><td>Consumer to enterprise range</td></tr>
+              <tr><td>Read Speed</td><td>80 – 160 MB/s</td><td>Sequential read</td></tr>
+              <tr><td>Rotation Speed</td><td>5,400 – 7,200 RPM</td><td>Higher RPM = faster access</td></tr>
+              <tr><td>Interface</td><td>SATA, SAS</td><td>SATA for consumer, SAS for server</td></tr>
+              <tr><td>Access Time</td><td>~5 – 10 ms</td><td>Mechanical seek delay</td></tr>
+              <tr><td>Cost per GB</td><td>~$0.02 – $0.04</td><td>Very economical</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ── B. SOLID-STATE STORAGE ── -->
@@ -432,31 +407,30 @@
 
           <div style="display:flex; flex-direction:column; gap:16px;">
             <div class="device-img-box">
-              <img src="images/ssd.jpg.png?w=600&q=85"
-                alt="NVMe M.2 SSD close up" loading="lazy"/>
+              <img src="images/ssd.jpg.png" alt="NVMe M.2 SSD" loading="lazy"/>
               <span class="img-label">NVMe M.2 SSD</span>
             </div>
             <div class="device-img-box">
-              <img src="images/flash-memory.jpg.png?w=600&q=85"
-                alt="USB flash drives and SD cards" loading="lazy"/>
+              <img src="images/flash-memory.jpg.png" alt="USB flash drives and SD cards" loading="lazy"/>
               <span class="img-label">USB Flash Drive &amp; SD Cards</span>
             </div>
           </div>
         </div>
 
-        <!-- SSD Specs Table -->
         <h4 style="color:var(--cream-mid); margin: 24px 0 12px;">SSD — Key Specifications</h4>
-        <table class="data-table">
-          <thead><tr><th>Property</th><th>SATA SSD</th><th>NVMe SSD</th></tr></thead>
-          <tbody>
-            <tr><td>Capacity</td><td>128 GB – 4 TB</td><td>256 GB – 8 TB</td></tr>
-            <tr><td>Read Speed</td><td>~550 MB/s</td><td>3,500 – 7,000 MB/s</td></tr>
-            <tr><td>Write Speed</td><td>~520 MB/s</td><td>3,000 – 6,500 MB/s</td></tr>
-            <tr><td>Interface</td><td>SATA III</td><td>PCIe 3.0 / 4.0</td></tr>
-            <tr><td>Form Factor</td><td>2.5" / M.2</td><td>M.2 / PCIe slot</td></tr>
-            <tr class="highlight-row"><td>Cost per GB</td><td>~$0.06</td><td>~$0.08 – $0.15</td></tr>
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>Property</th><th>SATA SSD</th><th>NVMe SSD</th></tr></thead>
+            <tbody>
+              <tr><td>Capacity</td><td>128 GB – 4 TB</td><td>256 GB – 8 TB</td></tr>
+              <tr><td>Read Speed</td><td>~550 MB/s</td><td>3,500 – 7,000 MB/s</td></tr>
+              <tr><td>Write Speed</td><td>~520 MB/s</td><td>3,000 – 6,500 MB/s</td></tr>
+              <tr><td>Interface</td><td>SATA III</td><td>PCIe 3.0 / 4.0</td></tr>
+              <tr><td>Form Factor</td><td>2.5" / M.2</td><td>M.2 / PCIe slot</td></tr>
+              <tr class="highlight-row"><td>Cost per GB</td><td>~$0.06</td><td>~$0.08 – $0.15</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ── C. OPTICAL STORAGE ── -->
@@ -500,63 +474,55 @@
 
           <div style="display:flex; flex-direction:column; gap:16px;">
             <div class="device-img-box">
-              <img src="images/optical.jpg.png?w=600&q=85"
-                alt="Stack of optical discs CDs DVDs" loading="lazy"/>
+              <img src="images/optical.jpg.png" alt="Optical Discs CD DVD Blu-ray" loading="lazy"/>
               <span class="img-label">Optical Discs (CD / DVD / Blu-ray)</span>
             </div>
-            <table class="data-table" style="margin-top:0;">
-              <thead><tr><th>Format</th><th>Capacity</th><th>Use Case</th></tr></thead>
-              <tbody>
-                <tr><td>CD-ROM</td><td>700 MB</td><td>Audio, software</td></tr>
-                <tr><td>DVD (SL)</td><td>4.7 GB</td><td>Movies, data</td></tr>
-                <tr><td>DVD (DL)</td><td>8.5 GB</td><td>Larger software</td></tr>
-                <tr><td>BD-R (SL)</td><td>25 GB</td><td>HD video</td></tr>
-                <tr><td>BD-R (DL)</td><td>50 GB</td><td>4K archiving</td></tr>
-                <tr><td>BD-R (XL)</td><td>100 GB</td><td>Bulk archiving</td></tr>
-              </tbody>
-            </table>
+            <div class="table-scroll">
+              <table class="data-table" style="margin-top:0;">
+                <thead><tr><th>Format</th><th>Capacity</th><th>Use Case</th></tr></thead>
+                <tbody>
+                  <tr><td>CD-ROM</td><td>700 MB</td><td>Audio, software</td></tr>
+                  <tr><td>DVD (SL)</td><td>4.7 GB</td><td>Movies, data</td></tr>
+                  <tr><td>DVD (DL)</td><td>8.5 GB</td><td>Larger software</td></tr>
+                  <tr><td>BD-R (SL)</td><td>25 GB</td><td>HD video</td></tr>
+                  <tr><td>BD-R (DL)</td><td>50 GB</td><td>4K archiving</td></tr>
+                  <tr><td>BD-R (XL)</td><td>100 GB</td><td>Bulk archiving</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════
-           COMPARISON TABLE
-           ═══════════════════════════════════ -->
       <div class="section-header reveal" style="margin-top:44px;">
         <div class="section-tag">Summary</div>
         <h2>All Devices <span class="accent">Compared</span></h2>
       </div>
 
       <div class="card reveal">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Device</th>
-              <th>Technology</th>
-              <th>Speed</th>
-              <th>Capacity</th>
-              <th>Cost/GB</th>
-              <th>Moving Parts?</th>
-              <th>Best For</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>HDD</strong></td><td>Magnetic</td><td>Medium</td><td>Very High</td><td>Very Low</td><td>Yes</td><td>Bulk storage</td></tr>
-            <tr><td><strong>Magnetic Tape</strong></td><td>Magnetic</td><td>Very Low</td><td>Extremely High</td><td>Lowest</td><td>Yes</td><td>Archiving</td></tr>
-            <tr class="highlight-row"><td><strong>SSD (NVMe)</strong></td><td>NAND Flash</td><td>Very High</td><td>High</td><td>Medium</td><td>No</td><td>OS / apps</td></tr>
-            <tr><td><strong>USB Flash Drive</strong></td><td>NAND Flash</td><td>Medium</td><td>Medium</td><td>Low</td><td>No</td><td>Data transfer</td></tr>
-            <tr><td><strong>SD Card</strong></td><td>NAND Flash</td><td>Medium</td><td>Low–Medium</td><td>Low</td><td>No</td><td>Mobile devices</td></tr>
-            <tr><td><strong>DVD</strong></td><td>Optical Laser</td><td>Low</td><td>Low</td><td>Very Low</td><td>Yes (disc spin)</td><td>Media distribution</td></tr>
-            <tr><td><strong>Blu-ray</strong></td><td>Blue Laser</td><td>Low–Medium</td><td>Medium</td><td>Low</td><td>Yes (disc spin)</td><td>HD archiving</td></tr>
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Device</th><th>Technology</th><th>Speed</th>
+                <th>Capacity</th><th>Cost/GB</th><th>Moving Parts?</th><th>Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>HDD</strong></td><td>Magnetic</td><td>Medium</td><td>Very High</td><td>Very Low</td><td>Yes</td><td>Bulk storage</td></tr>
+              <tr><td><strong>Magnetic Tape</strong></td><td>Magnetic</td><td>Very Low</td><td>Extremely High</td><td>Lowest</td><td>Yes</td><td>Archiving</td></tr>
+              <tr class="highlight-row"><td><strong>SSD (NVMe)</strong></td><td>NAND Flash</td><td>Very High</td><td>High</td><td>Medium</td><td>No</td><td>OS / apps</td></tr>
+              <tr><td><strong>USB Flash Drive</strong></td><td>NAND Flash</td><td>Medium</td><td>Medium</td><td>Low</td><td>No</td><td>Data transfer</td></tr>
+              <tr><td><strong>SD Card</strong></td><td>NAND Flash</td><td>Medium</td><td>Low–Medium</td><td>Low</td><td>No</td><td>Mobile devices</td></tr>
+              <tr><td><strong>DVD</strong></td><td>Optical Laser</td><td>Low</td><td>Low</td><td>Very Low</td><td>Yes</td><td>Media distribution</td></tr>
+              <tr><td><strong>Blu-ray</strong></td><td>Blue Laser</td><td>Low–Medium</td><td>Medium</td><td>Low</td><td>Yes</td><td>HD archiving</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <hr class="divider"/>
 
-      <!-- ═══════════════════════════════════
-           QUIZ
-           ═══════════════════════════════════ -->
       <div class="section-header reveal">
         <div class="section-tag">Test Yourself</div>
         <h2>Storage Devices <span class="accent">Quiz</span></h2>
@@ -569,7 +535,7 @@
         <div id="storageQuiz"></div>
       </div>
 
-      <div style="display:flex; gap:14px; margin-top:32px;" class="reveal">
+      <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal">
         <a href="index.html" class="btn btn-outline">← Home</a>
         <a href="instruction.html" class="btn btn-primary">Instruction Format →</a>
       </div>
@@ -584,72 +550,23 @@
         <li><a href="instruction.html">Instruction Format</a></li>
         <li><a href="feedback.html">Feedback</a></li>
       </ul>
-      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span> </p>
+      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p>
     </footer>
   </div>
 
   <script src="script.js"></script>
   <script>
     initQuiz('storageQuiz', [
-      {
-        question: "What does 'non-volatile' mean in the context of secondary storage?",
-        options: [
-          "Data is erased when power is removed",
-          "Data is retained permanently even without power",
-          "The storage device cannot be formatted",
-          "The device runs without electricity"
-        ],
-        answer: 1,
-        explanation: "Non-volatile means data persists even when power is off. All secondary storage types share this characteristic."
-      },
-      {
-        question: "Which component inside an HDD physically reads and writes data on the magnetic platters?",
-        options: ["Spindle Motor", "Controller Board", "Read/Write Head", "Actuator Arm"],
-        answer: 2,
-        explanation: "The read/write head hovers just above the spinning platters and uses magnetic fields to read and write binary data."
-      },
-      {
-        question: "What technology do SSDs use to store data?",
-        options: ["Spinning magnetic platters", "Laser beams on reflective discs", "NAND flash memory chips", "Phase-change material"],
-        answer: 2,
-        explanation: "SSDs use NAND flash memory — integrated circuit assemblies with no moving parts that store data electronically in transistor cells."
-      },
-      {
-        question: "An NVMe SSD is significantly faster than a SATA SSD because it uses which interface?",
-        options: ["USB 3.0", "PCIe (PCI Express)", "Thunderbolt", "SCSI"],
-        answer: 1,
-        explanation: "NVMe SSDs connect via PCIe, which has much higher bandwidth than the SATA interface, allowing speeds up to 7,000 MB/s."
-      },
-      {
-        question: "How does an optical disc store data?",
-        options: [
-          "Magnetising regions on a spinning platter",
-          "Charging transistor cells in a flash chip",
-          "Burning microscopic pits onto a reflective disc using a laser",
-          "Recording voltage changes in a tape coating"
-        ],
-        answer: 2,
-        explanation: "Optical discs store data as microscopic pits and lands on a reflective surface. A laser beam detects the difference in reflection to read the binary data."
-      },
-      {
-        question: "Which type of secondary storage is best suited for archiving extremely large datasets at the lowest possible cost?",
-        options: ["NVMe SSD", "USB Flash Drive", "Blu-ray Disc", "Magnetic Tape"],
-        answer: 3,
-        explanation: "Magnetic tape has the lowest cost per TB and a shelf life of 30+ years, making it the preferred choice for enterprise-scale archiving."
-      },
-      {
-        question: "Which of the following is a key DISADVANTAGE of optical storage compared to HDDs and SSDs?",
-        options: [
-          "Optical storage is more expensive per GB",
-          "Optical storage has moving parts",
-          "Optical storage has slow speeds and low capacity compared to modern drives",
-          "Optical storage is volatile"
-        ],
-        answer: 2,
-        explanation: "Optical discs are slow and offer limited capacity (max 100 GB for Blu-ray) compared to modern HDDs (up to 20 TB) and SSDs, and they are prone to scratches."
-      }
+      { question: "What does 'non-volatile' mean in the context of secondary storage?", options: ["Data is erased when power is removed","Data is retained permanently even without power","The storage device cannot be formatted","The device runs without electricity"], answer: 1, explanation: "Non-volatile means data persists even when power is off. All secondary storage types share this characteristic." },
+      { question: "Which component inside an HDD physically reads and writes data on the magnetic platters?", options: ["Spindle Motor","Controller Board","Read/Write Head","Actuator Arm"], answer: 2, explanation: "The read/write head hovers just above the spinning platters and uses magnetic fields to read and write binary data." },
+      { question: "What technology do SSDs use to store data?", options: ["Spinning magnetic platters","Laser beams on reflective discs","NAND flash memory chips","Phase-change material"], answer: 2, explanation: "SSDs use NAND flash memory — integrated circuit assemblies with no moving parts that store data electronically in transistor cells." },
+      { question: "An NVMe SSD is significantly faster than a SATA SSD because it uses which interface?", options: ["USB 3.0","PCIe (PCI Express)","Thunderbolt","SCSI"], answer: 1, explanation: "NVMe SSDs connect via PCIe, which has much higher bandwidth than the SATA interface, allowing speeds up to 7,000 MB/s." },
+      { question: "How does an optical disc store data?", options: ["Magnetising regions on a spinning platter","Charging transistor cells in a flash chip","Burning microscopic pits onto a reflective disc using a laser","Recording voltage changes in a tape coating"], answer: 2, explanation: "Optical discs store data as microscopic pits and lands on a reflective surface. A laser beam detects the difference in reflection to read the binary data." },
+      { question: "Which type of secondary storage is best suited for archiving extremely large datasets at the lowest possible cost?", options: ["NVMe SSD","USB Flash Drive","Blu-ray Disc","Magnetic Tape"], answer: 3, explanation: "Magnetic tape has the lowest cost per TB and a shelf life of 30+ years, making it the preferred choice for enterprise-scale archiving." },
+      { question: "Which of the following is a key DISADVANTAGE of optical storage compared to HDDs and SSDs?", options: ["Optical storage is more expensive per GB","Optical storage has moving parts","Optical storage has slow speeds and low capacity compared to modern drives","Optical storage is volatile"], answer: 2, explanation: "Optical discs are slow and offer limited capacity (max 100 GB for Blu-ray) compared to modern HDDs (up to 20 TB) and SSDs, and they are prone to scratches." }
     ]);
   </script>
 </body>
-</html>>
+</html>
+
 
