@@ -16,6 +16,7 @@
       <li><a href="storage.html">Storage Devices</a></li>
       <li><a href="instruction.html">Instruction Format</a></li>
       <li><a href="dns.html">DNS</a></li>
+      <li><a href="dns.html">DNS</a></li>
       <li><a href="feedback.html">Feedback</a></li>
     </ul>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
@@ -26,6 +27,7 @@
     <a href="index.html">Home</a>
     <a href="storage.html">Storage Devices</a>
     <a href="instruction.html">Instruction Format</a>
+    <a href="dns.html">DNS</a>
     <a href="dns.html">DNS</a>
     <a href="feedback.html">Feedback</a>
   </nav>
@@ -88,6 +90,9 @@
                 <input type="checkbox" name="visited" value="instruction" style="accent-color:var(--crimson); width:auto;"/> Instruction Format
               </label>
               <label style="display:flex; align-items:center; gap:8px; color:rgba(239,223,197,0.75); font-size:0.95rem; cursor:pointer; text-transform:none; letter-spacing:0;">
+                <input type="checkbox" name="visited" value="dns" style="accent-color:var(--crimson); width:auto;"/> DNS
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; color:rgba(239,223,197,0.75); font-size:0.95rem; cursor:pointer; text-transform:none; letter-spacing:0;">
                 <input type="checkbox" name="visited" value="quiz" style="accent-color:var(--crimson); width:auto;"/> Quiz Sections
               </label>
             </div>
@@ -108,7 +113,7 @@
 
           <div class="form-group">
             <label for="fbMessage">Your Message * <span id="charCount" style="color:rgba(239,223,197,0.4); text-transform:none; letter-spacing:0;">0</span>/500</label>
-            <textarea id="fbMessage" placeholder="Write your feedback here (minimum 10 characters)..."
+            <textarea id="fbMessage" placeholder="Write your feedback here (minimum 10 characters)"
               oninput="updateCharCount(this)"></textarea>
             <span class="error-msg" id="fbMessageErr"></span>
           </div>
@@ -136,7 +141,7 @@
       </div>
 
       <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal">
-        <a href="instruction.html" class="btn btn-outline">← Instruction Format</a>
+        <a href="dns.html" class="btn btn-outline">← DNS</a>
         <a href="index.html" class="btn btn-outline">Home →</a>
       </div>
 
