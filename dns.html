@@ -1,0 +1,654 @@
+<!DOCTYPE html> <!-- Declares this as an HTML5 document -->
+<html lang="en"> <!-- Root element; lang=en for accessibility and search engines -->
+<head> <!-- Page metadata — not visible to users -->
+  <meta name="color-scheme" content="dark"> <!-- Forces dark mode for browser UI elements -->
+  <meta charset="UTF-8"/> <!-- UTF-8 encoding so all characters display correctly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Makes page responsive on mobile -->
+  <title>DNS | TechPedia</title> <!-- Browser tab title for the DNS page -->
+  <link rel="stylesheet" href="style.css"/> <!-- Links the shared external CSS stylesheet -->
+  <style> 
+    /* ── Hero banner ── */
+        .page-hero-wrap {
+      position: relative; overflow: hidden;
+      background: var(--burgundy); min-height: 280px;
+      display: flex; align-items: flex-end;
+    }
+    .hero-banner {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.25) saturate(0.5); z-index: 0;
+    }
+    .page-hero-wrap::after {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(56,15,23,0.2) 0%, rgba(37,43,43,1) 100%);
+    }
+    .page-hero-wrap .page-hero { position: relative; z-index: 2; width: 100%; }
+    /* ── Characteristic pills ── */
+    .char-grid {
+      display: grid; /* CSS grid layout */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Auto-responsive — min 200px per pill */
+      gap: 16px; margin-top: 20px; /* Gaps between pills */
+    }
+    .char-pill {
+      background: rgba(143,11,19,0.2); /* Semi-transparent crimson */
+      border: 1px solid rgba(143,11,19,0.35); /* Subtle crimson border */
+      border-radius: 20px; padding: 18px 20px; /* Rounded corners, inner padding */
+      transition: all 0.3s; /* Smooth hover animation */
+    }
+    .char-pill:hover {
+      background: rgba(143,11,19,0.3); /* More opaque on hover */
+      transform: translateY(-3px); /* Lifts 3px on hover */
+      box-shadow: var(--shadow-sm); /* Shadow on hover */
+    }
+    .char-pill-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; } /* Large emoji icon */
+    .char-pill-title { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; color: var(--cream); margin-bottom: 4px; display: block; } /* Pill title in display font */
+    .char-pill-desc  { font-size: 0.85rem; color: rgba(239,223,197,0.65); margin-bottom: 0; line-height: 1.5; } /* Description text */
+
+    /* ── Function cards ── */
+    .fn-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 16px; } /* Three-column function cards */
+    .fn-card {
+      background: var(--glass); backdrop-filter: var(--blur); /* Glassmorphism effect */
+      border: 1px solid var(--glass-border); border-radius: 18px; padding: 20px; /* Glass border, rounded */
+      text-align: center; /* Centred text */
+    }
+    .fn-card-icon { font-size: 2rem; margin-bottom: 10px; display: block; } /* Large emoji icon */
+    .fn-card-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--crimson); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; } /* Small all-caps crimson title */
+    .fn-card-desc { font-size: 0.85rem; color: rgba(239,223,197,0.7); margin-bottom: 0; line-height: 1.5; } /* Description text */
+
+    /* ── Flowchart ── */
+    .flowchart {
+      display: flex; flex-direction: column; align-items: center; gap: 0; /* Vertical stack of nodes and arrows */
+      margin: 24px auto; max-width: 520px; /* Centred, constrained width */
+    }
+    .flow-node {
+      width: 100%; background: rgba(143,11,19,0.22); border: 1.5px solid rgba(143,11,19,0.45); /* Crimson node */
+      border-radius: 14px; padding: 13px 20px; text-align: center; /* Rounded, centred */
+      font-family: var(--font-body); font-size: 0.92rem; color: var(--cream); font-weight: 500;
+      transition: background 0.3s; /* Smooth hover */
+    }
+    .flow-node:hover { background: rgba(143,11,19,0.38); } /* More opaque on hover */
+    .flow-node.start, .flow-node.end {
+      background: rgba(56,15,23,0.7); border-color: var(--crimson); /* Dark start/end node */
+      border-radius: 999px; font-weight: 700; /* Pill shape */
+    }
+    .flow-node.decision {
+      background: rgba(76,79,84,0.5); border-color: rgba(239,223,197,0.25); /* Grey decision node */
+      font-style: italic; /* Italic text */
+    }
+    .flow-arrow {
+      width: 2px; height: 26px; /* Thin vertical line */
+      background: linear-gradient(to bottom, rgba(143,11,19,0.6), rgba(143,11,19,0.2)); /* Crimson gradient */
+      position: relative; display: flex; align-items: flex-end; justify-content: center;
+    }
+    .flow-arrow::after {
+      content: '▼'; position: absolute; bottom: -6px; /* Downward arrowhead */
+      color: rgba(143,11,19,0.7); font-size: 0.68rem;
+    }
+
+    /* ── Pro/Con ── */
+    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; } /* Two-column pros and cons */
+    .pro-list, .con-list { border-radius: 14px; padding: 12px 16px; }
+    .pro-list { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22); } /* Green advantages list */
+    .con-list { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.18); } /* Red disadvantages list */
+    .pro-list li, .con-list li { font-size: 0.86rem; margin-bottom: 5px; }
+    .pro-list li { color: #6ee7b7; } .pro-list li::marker { content: "✓  "; } /* Green checkmark */
+    .con-list li { color: #fca5a5; } .con-list li::marker { content: "✗  "; } /* Red cross */
+
+    /* ── DNS Record type cards ── */
+    .record-grid {
+      display: grid; /* Grid layout for record type cards */
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Auto-responsive, min 220px */
+      gap: 16px; margin-top: 16px;
+    }
+    .record-card {
+      background: rgba(56,15,23,0.5); /* Dark burgundy background */
+      border: 1px solid rgba(143,11,19,0.3); /* Crimson border */
+      border-radius: 20px; padding: 20px 22px; /* Rounded, padded */
+      transition: all 0.3s; /* Smooth hover */
+    }
+    .record-card:hover {
+      background: rgba(143,11,19,0.25); /* More opaque on hover */
+      transform: translateY(-3px); /* Lifts on hover */
+      box-shadow: var(--shadow-sm); /* Shadow on hover */
+    }
+    .record-tag {
+      display: inline-block; /* Inline pill badge */
+      background: rgba(143,11,19,0.35); border: 1px solid rgba(143,11,19,0.5); /* Crimson pill */
+      color: var(--cream); font-family: var(--font-mono); /* Monospace font for record type */
+      font-size: 0.78rem; font-weight: 700; padding: 3px 12px; border-radius: 999px; /* Small bold pill */
+      margin-bottom: 10px; letter-spacing: 1px;
+    }
+    .record-title { font-family: var(--font-display); font-size: 0.92rem; font-weight: 700; color: var(--cream); margin-bottom: 6px; display: block; } /* Record type name */
+    .record-desc { font-size: 0.85rem; color: rgba(239,223,197,0.65); margin-bottom: 0; line-height: 1.5; } /* Record description */
+    .record-example { font-family: var(--font-mono); font-size: 0.78rem; color: rgba(239,223,197,0.4); margin-top: 8px; display: block; } /* Example in monospace font */
+
+    /* ── Comparison table highlight ── */
+    .highlight-row td { background: rgba(143,11,19,0.12) !important; } /* Crimson tint on highlighted rows */
+
+    /* ── Table scroll on mobile ── */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; } /* Horizontal scroll for tables on mobile */
+
+    @media (max-width: 768px) {
+      .fn-cards { grid-template-columns: 1fr 1fr; } /* Function cards 2-col on mobile */
+      .pro-con  { grid-template-columns: 1fr; } /* Pro/con stacks on mobile */
+      .char-grid { grid-template-columns: 1fr 1fr; } /* Char grid 2-col on mobile */
+      .record-grid { grid-template-columns: 1fr; } /* Record cards 1-col on mobile */
+    }
+    @media (max-width: 480px) {
+      .fn-cards  { grid-template-columns: 1fr; } /* Function cards 1-col on small mobile */
+      .char-grid { grid-template-columns: 1fr; } /* Char grid 1-col on small mobile */
+    }
+  </style>
+</head>
+<body> <!-- All visible content starts here -->
+
+  <nav class="navbar"> <!-- Fixed frosted glass navbar — identical across all pages -->
+    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a> <!-- Logo; span makes Pedia crimson -->
+    <ul class="nav-menu"> <!-- Desktop horizontal navigation menu -->
+      <li><a href="index.html">Home</a></li> <!-- Home link -->
+      <li><a href="storage.html">Storage Devices</a></li> <!-- Storage Devices link -->
+      <li><a href="instruction.html">Instruction Format</a></li> <!-- Instruction Format link -->
+      <li><a href="dns.html">DNS</a></li> <!-- DNS link — this page; JavaScript adds 'active' class -->
+      <li><a href="feedback.html">Feedback</a></li> <!-- Feedback link -->
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu"> <!-- Mobile hamburger button -->
+      <span></span><span></span><span></span> <!-- Three bars animated into X by JavaScript -->
+    </button>
+  </nav>
+
+  <nav class="nav-mobile-menu" id="mobileMenu"> <!-- Mobile dropdown — JavaScript shows/hides -->
+    <a href="index.html">Home</a> <!-- Mobile home link -->
+    <a href="storage.html">Storage Devices</a> <!-- Mobile storage link -->
+    <a href="instruction.html">Instruction Format</a> <!-- Mobile instruction link -->
+    <a href="dns.html">DNS</a> <!-- Mobile DNS link -->
+    <a href="feedback.html">Feedback</a> <!-- Mobile feedback link -->
+  </nav>
+
+  <div class="page-wrapper"> <!-- Content wrapper with padding-top to clear fixed navbar -->
+
+    <!-- HERO BANNER -->
+    <div class="page-hero-wrap"> <!-- Hero banner section with background image and overlay -->
+      <img class="hero-banner" src="images/dns.jpg.png" alt="DNS network diagram banner"/> <!-- Uploaded DNS image; dimmed by CSS filter -->
+      <div class="page-hero"> <!-- Hero text content on top of image -->
+        <div class="section-tag">Topic 03</div> <!-- Small label — DNS is the 3rd topic -->
+        <h1>Domain Name <span class="accent">System</span></h1> <!-- Page heading; System is crimson -->
+        <p style="max-width:580px; margin-top:12px; color:rgba(239,223,197,0.72);"> <!-- Hero description -->
+          The internet's phonebook — how human-readable domain names are translated into machine-readable IP addresses every time you visit a website.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-area"> <!-- Main content area — 1140px max, centred -->
+
+      <!-- ═══════════════════════════════════
+           SECTION 1 — DEFINITION
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:48px;"> <!-- Section header with scroll reveal -->
+        <div class="section-tag">Section 01</div> <!-- Section label -->
+        <h2>What is <span class="accent">DNS</span>?</h2> <!-- Section heading -->
+      </div>
+
+      <div class="card reveal"> <!-- Glass card with scroll reveal -->
+        <span class="card-label">Definition</span> <!-- Small crimson uppercase label -->
+        <p>
+          The <strong>Domain Name System (DNS)</strong> is a hierarchical, distributed naming system that translates human-readable
+          <strong>domain names</strong> (like <code>www.google.com</code>) into numerical <strong>IP addresses</strong>
+          (like <code>142.250.190.46</code>) that computers use to identify each other on a network.
+        </p>
+        <p>
+          Without DNS, you would have to memorise a different number for every website you visit.
+          DNS acts as the internet's <strong>phonebook</strong> — you look up a name, it gives you the address.
+          It was developed in <strong>1983</strong> by Paul Mockapetris and remains one of the most critical components of the internet today.
+        </p>
+
+        <div class="char-grid" style="margin-top:24px;"> <!-- Responsive grid of characteristic pills -->
+          <div class="char-pill"> <!-- Non-Volatile pill -->
+            <span class="char-pill-icon">📖</span> <!-- Book emoji -->
+            <span class="char-pill-title">Phonebook of the Internet</span>
+            <p class="char-pill-desc">Maps easy-to-remember domain names to numeric IP addresses automatically.</p>
+          </div>
+          <div class="char-pill">
+            <span class="char-pill-icon">🌐</span> <!-- Globe emoji -->
+            <span class="char-pill-title">Distributed System</span>
+            <p class="char-pill-desc">No single server holds all records — thousands of servers work together worldwide.</p>
+          </div>
+          <div class="char-pill">
+            <span class="char-pill-icon">⚡</span> <!-- Lightning emoji -->
+            <span class="char-pill-title">Fast Resolution</span>
+            <p class="char-pill-desc">DNS queries are resolved in milliseconds using caching and hierarchy.</p>
+          </div>
+          <div class="char-pill">
+            <span class="char-pill-icon">🔁</span> <!-- Arrows emoji -->
+            <span class="char-pill-title">Automatic</span>
+            <p class="char-pill-desc">Happens invisibly every time you type a URL — you never have to do anything manually.</p>
+          </div>
+          <div class="char-pill">
+            <span class="char-pill-icon">🗂️</span> <!-- Card index emoji -->
+            <span class="char-pill-title">Hierarchical</span>
+            <p class="char-pill-desc">Organised in a tree structure: Root → TLD → Domain → Subdomain.</p>
+          </div>
+          <div class="char-pill">
+            <span class="char-pill-icon">💾</span> <!-- Disk emoji -->
+            <span class="char-pill-title">Cached</span>
+            <p class="char-pill-desc">Results stored temporarily to speed up repeated lookups and reduce server load.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 2 — HOW DNS WORKS (FLOWCHART)
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Flowchart</div> <!-- Section label for flowchart -->
+        <h2>How DNS <span class="accent">Resolution</span> Works</h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">Step-by-step DNS Lookup — what happens when you type a URL</span>
+        <p style="color:rgba(239,223,197,0.65); font-size:0.92rem; margin-bottom:4px;">
+          Every time you visit a website, this entire process happens automatically in the background — usually in under 100 milliseconds.
+        </p>
+
+        <div class="flowchart"> <!-- Vertical step-by-step flowchart -->
+          <div class="flow-node start">🧑‍💻 User types www.google.com in browser</div> <!-- Start node — pill shaped -->
+          <div class="flow-arrow"></div> <!-- Downward arrow -->
+
+          <div class="flow-node"> <!-- Step 1 -->
+            <strong>Step 1 — Browser Cache Check</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Browser checks its own DNS cache. If the IP was looked up recently, it uses the cached result immediately.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node decision">Cache hit?</div> <!-- Decision node -->
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 2 -->
+            <strong>Step 2 — OS / Resolver Cache</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">If not in browser cache, OS checks its own DNS resolver cache from previous lookups.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 3 -->
+            <strong>Step 3 — Recursive Resolver</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Query sent to ISP's Recursive DNS Resolver. It does the heavy lifting of finding the answer.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 4 -->
+            <strong>Step 4 — Root Name Server</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Resolver asks a Root Server. There are 13 root server clusters worldwide. Root server points to correct TLD server.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 5 -->
+            <strong>Step 5 — TLD Name Server</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">TLD server (e.g., .com) points to the Authoritative Name Server for google.com.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 6 -->
+            <strong>Step 6 — Authoritative Name Server</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">Holds the actual DNS records for google.com and returns the IP address.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node"> <!-- Step 7 -->
+            <strong>Step 7 — Response &amp; Cache</strong><br/>
+            <span style="font-size:0.82rem; color:rgba(239,223,197,0.6);">IP address returned to browser. Result cached based on TTL (Time to Live) value.</span>
+          </div>
+          <div class="flow-arrow"></div>
+
+          <div class="flow-node start">✅ Browser connects to IP and loads the website</div> <!-- End node -->
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 3 — DNS HIERARCHY
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 02</div>
+        <h2>DNS <span class="accent">Hierarchy</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">The Tree Structure of DNS</span>
+        <p>
+          DNS is organised like an <strong>inverted tree</strong>. At the very top is the <strong>Root</strong>, below that
+          are <strong>Top-Level Domains (TLDs)</strong>, then <strong>Second-Level Domains</strong>, and finally
+          <strong>Subdomains</strong>. Each level is separated by a dot in the domain name.
+        </p>
+
+        <div class="grid-2" style="gap:24px; margin-top:20px; align-items:start;"> <!-- Two-column grid -->
+          <div>
+            <h4 style="color:var(--cream-mid); margin-bottom:12px;">Example: mail.google.com</h4>
+            <div class="flowchart" style="max-width:100%;"> <!-- Hierarchy flowchart -->
+              <div class="flow-node start" style="font-size:0.85rem;">. (Root — invisible, at the end of every domain)</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node" style="font-size:0.85rem;">🌍 <strong>.com</strong> — Top-Level Domain (TLD)</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node" style="font-size:0.85rem;">🏢 <strong>google</strong> — Second-Level Domain (SLD)</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node start" style="font-size:0.85rem;">📧 <strong>mail</strong> — Subdomain</div>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="color:var(--cream-mid); margin-bottom:12px;">Types of Top-Level Domains</h4>
+            <div class="blob-card" style="margin-bottom:12px;"> <!-- Blob card for gTLDs -->
+              <p style="font-size:0.85rem; margin-bottom:4px;"><strong style="color:var(--cream);">Generic TLDs (gTLDs)</strong></p>
+              <p style="font-size:0.85rem; color:rgba(239,223,197,0.65); margin-bottom:0;">.com (commercial), .org (organisation), .net (network), .edu (education), .gov (government)</p>
+            </div>
+            <div class="blob-card" style="margin-bottom:12px;"> <!-- Blob card for ccTLDs -->
+              <p style="font-size:0.85rem; margin-bottom:4px;"><strong style="color:var(--cream);">Country Code TLDs (ccTLDs)</strong></p>
+              <p style="font-size:0.85rem; color:rgba(239,223,197,0.65); margin-bottom:0;">.in (India), .uk (United Kingdom), .us (USA), .jp (Japan), .au (Australia)</p>
+            </div>
+            <div class="blob-card"> <!-- Blob card for new TLDs -->
+              <p style="font-size:0.85rem; margin-bottom:4px;"><strong style="color:var(--cream);">New Generic TLDs</strong></p>
+              <p style="font-size:0.85rem; color:rgba(239,223,197,0.65); margin-bottom:0;">.app, .dev, .tech, .io, .ai — newer extensions introduced after 2012</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 4 — DNS SERVERS
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 03</div>
+        <h2>Types of DNS <span class="accent">Servers</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">The four servers involved in every DNS lookup</span>
+
+        <div class="fn-cards"> <!-- Three-column function cards -->
+          <div class="fn-card">
+            <span class="fn-card-icon">🔄</span>
+            <span class="fn-card-title">Recursive Resolver</span>
+            <p class="fn-card-desc">First stop after your device. Acts on your behalf querying other servers. Usually run by your ISP or a public DNS provider like Google 8.8.8.8 or Cloudflare 1.1.1.1.</p>
+          </div>
+          <div class="fn-card">
+            <span class="fn-card-icon">🌍</span>
+            <span class="fn-card-title">Root Name Server</span>
+            <p class="fn-card-desc">Highest level of DNS. There are 13 root server addresses (A through M) managed by ICANN, NASA, and Verisign. They direct queries to the correct TLD server.</p>
+          </div>
+          <div class="fn-card">
+            <span class="fn-card-icon">🗂️</span>
+            <span class="fn-card-title">TLD Name Server</span>
+            <p class="fn-card-desc">Handles queries for a specific TLD like .com or .in. Maintained by domain registries. Points the resolver to the authoritative server for the specific domain.</p>
+          </div>
+        </div>
+        <div class="fn-cards" style="margin-top:16px; grid-template-columns: 1fr 1fr; max-width:680px;"> <!-- Two-column second row -->
+          <div class="fn-card">
+            <span class="fn-card-icon">✅</span>
+            <span class="fn-card-title">Authoritative Name Server</span>
+            <p class="fn-card-desc">Final authority for a domain. Holds the actual DNS records and gives the definitive IP address answer. Managed by the domain owner.</p>
+          </div>
+          <div class="fn-card">
+            <span class="fn-card-icon">💾</span>
+            <span class="fn-card-title">DNS Cache</span>
+            <p class="fn-card-desc">Stores recent DNS results at every level — browser, OS, resolver — to avoid repeating the full lookup process each time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 5 — DNS RECORD TYPES
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 04</div>
+        <h2>DNS <span class="accent">Record Types</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">Common DNS records stored in the Authoritative Name Server</span>
+        <p>Each record type stores different information about a domain. These are the most important types you need to know:</p>
+
+        <div class="record-grid"> <!-- Responsive grid of DNS record type cards -->
+          <div class="record-card"> <!-- A Record card -->
+            <span class="record-tag">A</span> <!-- Monospace pill badge showing record type -->
+            <span class="record-title">Address Record</span> <!-- Record name -->
+            <p class="record-desc">Maps a domain name to an IPv4 address. The most common and fundamental record type.</p>
+            <span class="record-example">google.com → 142.250.190.46</span> <!-- Example in monospace -->
+          </div>
+          <div class="record-card"> <!-- AAAA Record -->
+            <span class="record-tag">AAAA</span>
+            <span class="record-title">IPv6 Address Record</span>
+            <p class="record-desc">Maps a domain name to an IPv6 address — the newer 128-bit IP standard.</p>
+            <span class="record-example">google.com → 2404:6800:4009::200e</span>
+          </div>
+          <div class="record-card"> <!-- CNAME Record -->
+            <span class="record-tag">CNAME</span>
+            <span class="record-title">Canonical Name</span>
+            <p class="record-desc">Alias — maps one domain name to another. Used to point subdomains to the main domain.</p>
+            <span class="record-example">www.example.com → example.com</span>
+          </div>
+          <div class="record-card"> <!-- MX Record -->
+            <span class="record-tag">MX</span>
+            <span class="record-title">Mail Exchange</span>
+            <p class="record-desc">Specifies the mail server responsible for accepting email for the domain.</p>
+            <span class="record-example">gmail.com → smtp.google.com</span>
+          </div>
+          <div class="record-card"> <!-- NS Record -->
+            <span class="record-tag">NS</span>
+            <span class="record-title">Name Server</span>
+            <p class="record-desc">Identifies which DNS servers are the authoritative name servers for the domain.</p>
+            <span class="record-example">example.com → ns1.provider.com</span>
+          </div>
+          <div class="record-card"> <!-- TXT Record -->
+            <span class="record-tag">TXT</span>
+            <span class="record-title">Text Record</span>
+            <p class="record-desc">Stores arbitrary text — used for domain verification, SPF spam prevention, and security.</p>
+            <span class="record-example">v=spf1 include:_spf.google.com ~all</span>
+          </div>
+          <div class="record-card"> <!-- PTR Record -->
+            <span class="record-tag">PTR</span>
+            <span class="record-title">Pointer Record</span>
+            <p class="record-desc">Reverse DNS — maps an IP address back to a domain name. Used in email security.</p>
+            <span class="record-example">142.250.190.46 → google.com</span>
+          </div>
+          <div class="record-card"> <!-- TTL -->
+            <span class="record-tag">TTL</span>
+            <span class="record-title">Time to Live</span>
+            <p class="record-desc">Value in every record — how long in seconds the result can be cached before re-querying.</p>
+            <span class="record-example">TTL: 3600 = cache for 1 hour</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 6 — DNS vs IP
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 05</div>
+        <h2>DNS <span class="accent">vs</span> IP Address</h2>
+      </div>
+
+      <div class="card reveal">
+        <div class="table-scroll"> <!-- Horizontal scroll wrapper for mobile -->
+          <table class="data-table"> <!-- Styled comparison table -->
+            <thead>
+              <tr><th>Feature</th><th>Domain Name (DNS)</th><th>IP Address</th></tr> <!-- Table headers -->
+            </thead>
+            <tbody>
+              <tr><td>Format</td><td>www.google.com</td><td>142.250.190.46</td></tr>
+              <tr class="highlight-row"><td>Human readable?</td><td>Yes — easy to remember</td><td>No — just numbers</td></tr> <!-- highlight-row adds crimson tint -->
+              <tr><td>Used by</td><td>Humans (in browsers)</td><td>Computers (for routing)</td></tr>
+              <tr><td>Changes?</td><td>Rarely changes</td><td>Can change (dynamic IP)</td></tr>
+              <tr class="highlight-row"><td>Purpose</td><td>Identity / name</td><td>Location / address</td></tr>
+              <tr><td>Analogy</td><td>Person's name</td><td>Person's home address</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box" style="margin-top:20px;"> <!-- Highlighted info box with crimson left border -->
+          <strong>Key insight:</strong> DNS is what makes the web usable. Without it, accessing any website would require memorising strings of numbers like <code>142.250.190.46</code> instead of simply typing <code>google.com</code>.
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SECTION 7 — ADVANTAGES & DISADVANTAGES
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Section 06</div>
+        <h2>Advantages &amp; <span class="accent">Limitations</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <div class="pro-con"> <!-- Two-column pros and cons grid -->
+          <ul class="pro-list"> <!-- Green advantages -->
+            <li>Human-friendly — easy domain names instead of IP numbers</li>
+            <li>Highly scalable — handles billions of queries daily</li>
+            <li>Fast — caching ensures most lookups are near-instant</li>
+            <li>Flexible — IP can change without users noticing</li>
+            <li>Decentralised — no single point of failure</li>
+            <li>Supports load balancing via multiple A records</li>
+          </ul>
+          <ul class="con-list"> <!-- Red disadvantages -->
+            <li>DNS poisoning — attackers can forge DNS responses</li>
+            <li>DDoS attacks on DNS servers can take down many sites</li>
+            <li>Propagation delay — DNS changes take up to 48 hours to spread</li>
+            <li>Privacy concern — queries unencrypted by default (solved by DNS over HTTPS)</li>
+            <li>Caching issues — outdated records can cause incorrect routing</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           SUMMARY TABLE
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Summary</div>
+        <h2>DNS Key <span class="accent">Concepts</span> at a Glance</h2>
+      </div>
+
+      <div class="card reveal">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr><th>Concept</th><th>What it is</th><th>Example</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>DNS</strong></td><td>Internet's phonebook — name to IP translation</td><td>google.com → 142.250.190.46</td></tr>
+              <tr class="highlight-row"><td><strong>Domain Name</strong></td><td>Human-readable address of a website</td><td>www.youtube.com</td></tr>
+              <tr><td><strong>IP Address</strong></td><td>Numeric address computers use for routing</td><td>172.217.163.46</td></tr>
+              <tr><td><strong>Root Server</strong></td><td>Top of DNS hierarchy, 13 clusters globally</td><td>a.root-servers.net</td></tr>
+              <tr class="highlight-row"><td><strong>TLD</strong></td><td>Top-Level Domain — last part of a domain</td><td>.com, .in, .org</td></tr>
+              <tr><td><strong>Authoritative NS</strong></td><td>Holds actual DNS records for a domain</td><td>ns1.google.com</td></tr>
+              <tr class="highlight-row"><td><strong>A Record</strong></td><td>Maps domain to IPv4 address</td><td>example.com → 93.184.216.34</td></tr>
+              <tr><td><strong>TTL</strong></td><td>How long a DNS result stays cached</td><td>3600 seconds = 1 hour</td></tr>
+              <tr><td><strong>DNS Cache</strong></td><td>Stored results to speed up repeat lookups</td><td>Browser / OS / Resolver cache</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr class="divider"/> <!-- Horizontal section divider -->
+
+      <!-- ═══════════════════════════════════
+           QUIZ
+           ═══════════════════════════════════ -->
+      <div class="section-header reveal">
+        <div class="section-tag">Test Yourself</div>
+        <h2>DNS <span class="accent">Quiz</span></h2>
+      </div>
+
+      <div class="quiz-section reveal"> <!-- Quiz container with scroll reveal -->
+        <p style="color:rgba(239,223,197,0.65); margin-bottom:24px;">
+          7 questions based on the content above. Select an answer to see the explanation, then press Next.
+        </p>
+        <div id="dnsQuiz"></div> <!-- Empty div — JavaScript builds entire quiz here -->
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal"> <!-- Navigation buttons -->
+        <a href="instruction.html" class="btn btn-outline">← Instruction Format</a> <!-- Back to previous topic -->
+        <a href="feedback.html" class="btn btn-primary">Feedback →</a> <!-- Forward to feedback page -->
+      </div>
+    </div><!-- /content-area -->
+    <footer>
+      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a>
+      <ul class="foot-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="storage.html">Storage Devices</a></li>
+        <li><a href="instruction.html">Instruction Format</a></li>
+        <li><a href="dns.html">DNS</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+      </ul>
+      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span> </p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script> <!-- Shared JavaScript file — nav, scroll reveal, quiz engine -->
+  <script>
+    initQuiz('dnsQuiz', [ // Calls the shared quiz engine with this page's quiz ID and 7 questions
+      {
+        question: "What is the primary function of DNS?", // Question text
+        options: [
+          "To assign IP addresses to devices on a network",
+          "To translate domain names into IP addresses", // Correct answer at index 1
+          "To encrypt data sent over the internet",
+          "To connect two different networks together"
+        ],
+        answer: 1, // Index of correct option (0-based)
+        explanation: "DNS (Domain Name System) translates human-readable domain names like www.google.com into numeric IP addresses like 142.250.190.46 that computers use to communicate."
+      },
+      {
+        question: "Which type of DNS server is the first to receive a query from your device?",
+        options: [
+          "Root Name Server",
+          "Authoritative Name Server",
+          "Recursive Resolver", // Correct — index 2
+          "TLD Name Server"
+        ],
+        answer: 2,
+        explanation: "The Recursive Resolver (usually run by your ISP or a public provider like Google 8.8.8.8) is the first stop. It does the work of querying other servers on your behalf to find the answer."
+      },
+      {
+        question: "What does TTL (Time to Live) mean in the context of DNS?",
+        options: [
+          "The maximum time a website can stay online",
+          "The time a DNS record stays cached before being refreshed", // Correct — index 1
+          "The speed at which DNS queries are processed",
+          "The lifespan of a domain name registration"
+        ],
+        answer: 1,
+        explanation: "TTL specifies how long (in seconds) a DNS result can be stored in cache. A TTL of 3600 means the record is cached for 1 hour before the DNS server checks for updates."
+      },
+      {
+        question: "What DNS record type maps a domain name to an IPv4 address?",
+        options: ["MX Record", "CNAME Record", "NS Record", "A Record"], // A Record is correct — index 3
+        answer: 3,
+        explanation: "The A (Address) Record maps a domain name to its IPv4 address. For example, google.com → 142.250.190.46. It is the most fundamental DNS record type."
+      },
+      {
+        question: "How many root name server addresses exist at the top of the DNS hierarchy?",
+        options: ["5", "10", "13", "26"], // 13 is correct — index 2
+        answer: 2,
+        explanation: "There are 13 root name server addresses (labeled A through M), though each is actually a cluster of many physical servers spread worldwide managed by organisations like ICANN and NASA."
+      },
+      {
+        question: "Which of the following best describes a CNAME record?",
+        options: [
+          "It maps an IP address back to a domain name",
+          "It stores email server information for a domain",
+          "It is an alias that maps one domain name to another", // Correct — index 2
+          "It identifies the authoritative name servers for a domain"
+        ],
+        answer: 2,
+        explanation: "A CNAME (Canonical Name) record creates an alias — it maps one domain to another. For example, www.example.com can be a CNAME pointing to example.com, so both resolve to the same IP."
+      },
+      {
+        question: "What is a major security concern with traditional DNS?",
+        options: [
+          "DNS queries are too slow for modern networks",
+          "DNS cannot handle IPv6 addresses",
+          "DNS queries are unencrypted by default, exposing browsing activity", // Correct — index 2
+          "DNS only works on wired connections"
+        ],
+        answer: 2,
+        explanation: "Traditional DNS sends queries in plain text with no encryption, meaning ISPs, attackers, or network observers can see which websites you are looking up. DNS over HTTPS (DoH) was introduced to solve this."
+      }
+    ]);
+  </script>
+</body>
+</html>
