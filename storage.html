@@ -1,203 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta name="color-scheme" content="dark">
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Secondary Storage Devices | TechPedia</title>
-  <link rel="stylesheet" href="style.css"/>
+<!DOCTYPE html> <!-- Declares this as an HTML5 document -->
+<html lang="en"> <!-- Root element; lang=en for accessibility and search engines -->
+<head> <!-- Page metadata — not visible to users -->
+  <meta name="color-scheme" content="dark"> <!-- Forces dark mode for browser UI elements -->
+  <meta charset="UTF-8"/> <!-- UTF-8 encoding so all characters display correctly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Makes page responsive on mobile -->
+  <title>Secondary Storage Devices | TechPedia</title> <!-- Browser tab title -->
+  <link rel="stylesheet" href="style.css"/> <!-- Links the shared external CSS stylesheet -->
   <style>
     /* ── Hero banner ── */
     .page-hero-wrap {
       position: relative; overflow: hidden;
-      background: var(--burgundy);
-      min-height: 280px;
+      background: var(--burgundy); min-height: 280px;
       display: flex; align-items: flex-end;
     }
     .hero-banner {
       position: absolute; inset: 0;
       width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.3) saturate(0.5);
-      z-index: 0;
+      filter: brightness(0.25) saturate(0.5); z-index: 0;
     }
     .page-hero-wrap::after {
       content: ''; position: absolute; inset: 0; z-index: 1;
       background: linear-gradient(to bottom, rgba(56,15,23,0.2) 0%, rgba(37,43,43,1) 100%);
     }
     .page-hero-wrap .page-hero { position: relative; z-index: 2; width: 100%; }
-
     /* ── Characteristic pills ── */
     .char-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px; margin-top: 20px;
+      display: grid; /* CSS grid layout for pills */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Auto-responsive — pills min 200px wide */
+      gap: 16px; margin-top: 20px; /* Gaps between pills */
     }
     .char-pill {
-      background: rgba(143,11,19,0.2);
-      border: 1px solid rgba(143,11,19,0.35);
-      border-radius: 20px; padding: 18px 20px;
-      transition: all 0.3s;
+      background: rgba(143,11,19,0.2); /* Semi-transparent crimson background */
+      border: 1px solid rgba(143,11,19,0.35); /* Subtle crimson border */
+      border-radius: 20px; padding: 18px 20px; /* Rounded corners, inner padding */
+      transition: all 0.3s; /* Smooth hover transition */
     }
     .char-pill:hover {
-      background: rgba(143,11,19,0.3);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-sm);
+      background: rgba(143,11,19,0.3); /* Slightly more opaque on hover */
+      transform: translateY(-3px); /* Lifts 3px on hover */
+      box-shadow: var(--shadow-sm); /* Subtle shadow on hover */
     }
-    .char-pill-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
-    .char-pill-title { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; color: var(--cream); margin-bottom: 4px; display: block; }
-    .char-pill-desc  { font-size: 0.85rem; color: rgba(239,223,197,0.65); margin-bottom: 0; line-height: 1.5; }
+    .char-pill-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; } /* Large emoji icon in pill */
+    .char-pill-title { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; color: var(--cream); margin-bottom: 4px; display: block; } /* Pill title in display font */
+    .char-pill-desc  { font-size: 0.85rem; color: rgba(239,223,197,0.65); margin-bottom: 0; line-height: 1.5; } /* Pill description text */
 
     /* ── Function cards ── */
-    .fn-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 16px; }
+    .fn-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 16px; } /* Three equal-column grid for function cards */
     .fn-card {
-      background: var(--glass);
-      backdrop-filter: var(--blur);
-      border: 1px solid var(--glass-border);
-      border-radius: 18px; padding: 20px;
-      text-align: center;
+      background: var(--glass); backdrop-filter: var(--blur); /* Glassmorphism effect */
+      border: 1px solid var(--glass-border); border-radius: 18px; padding: 20px; /* Glass border, rounded */
+      text-align: center; /* Centred content */
     }
-    .fn-card-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
-    .fn-card-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--crimson); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
-    .fn-card-desc { font-size: 0.85rem; color: rgba(239,223,197,0.7); margin-bottom: 0; line-height: 1.5; }
+    .fn-card-icon { font-size: 2rem; margin-bottom: 10px; display: block; } /* Large emoji icon */
+    .fn-card-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--crimson); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; } /* Small all-caps crimson title */
+    .fn-card-desc { font-size: 0.85rem; color: rgba(239,223,197,0.7); margin-bottom: 0; line-height: 1.5; } /* Description text */
 
     /* ── Device image ── */
     .device-img-box {
-      border-radius: 20px; overflow: hidden;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-sm);
-      position: relative;
+      border-radius: 20px; overflow: hidden; /* Rounded corners clip the image */
+      border: 1px solid var(--glass-border); box-shadow: var(--shadow-sm); /* Glass border and shadow */
+      position: relative; /* For the floating label overlay */
     }
     .device-img-box img {
-      width: 100%; height: 200px; object-fit: cover; display: block;
-      transition: transform 0.5s;
+      width: 100%; height: 200px; object-fit: cover; display: block; /* Image fills box, 200px tall, cropped */
+      transition: transform 0.5s; /* Smooth zoom on hover */
     }
-    .device-img-box:hover img { transform: scale(1.04); }
+    .device-img-box:hover img { transform: scale(1.04); } /* Image zooms 4% on hover */
     .device-img-box .img-label {
-      position: absolute; bottom: 10px; left: 12px;
-      background: rgba(56,15,23,0.88);
-      backdrop-filter: blur(8px);
-      color: var(--cream); font-size: 0.66rem;
-      font-weight: 600; letter-spacing: 2px;
-      text-transform: uppercase; padding: 5px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(239,223,197,0.2);
+      position: absolute; bottom: 10px; left: 12px; /* Floating label at bottom-left of image */
+      background: rgba(56,15,23,0.88); backdrop-filter: blur(8px); /* Dark semi-transparent background */
+      color: var(--cream); font-size: 0.66rem; font-weight: 600; letter-spacing: 2px; /* Small bold spaced cream text */
+      text-transform: uppercase; padding: 5px 12px; border-radius: 999px; /* All caps, pill shape */
+      border: 1px solid rgba(239,223,197,0.2); /* Subtle cream border */
     }
 
     /* ── Pro/Con lists ── */
-    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-    .pro-list, .con-list { border-radius: 14px; padding: 14px 18px; }
-    .pro-list { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); }
-    .con-list { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); }
-    .pro-list li, .con-list li { font-size: 0.88rem; margin-bottom: 6px; }
-    .pro-list li { color: #6ee7b7; }
-    .con-list li { color: #fca5a5; }
-    .pro-list li::marker { content: "✓  "; }
-    .con-list li::marker { content: "✗  "; }
+    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; } /* Two-column pros and cons grid */
+    .pro-list, .con-list { border-radius: 14px; padding: 14px 18px; } /* Rounded padding */
+    .pro-list { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); } /* Green advantages list */
+    .con-list { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); } /* Red disadvantages list */
+    .pro-list li, .con-list li { font-size: 0.88rem; margin-bottom: 6px; } /* List item spacing */
+    .pro-list li { color: #6ee7b7; } /* Green text for advantages */
+    .con-list li { color: #fca5a5; } /* Red text for disadvantages */
+    .pro-list li::marker { content: "\2713  "; } /* Green checkmark bullet */
+    .con-list li::marker { content: "\2717  "; } /* Red cross bullet */
 
     /* ── FLOWCHART ── */
     .flowchart {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 0;
-      margin: 24px auto; max-width: 500px;
+      display: flex; flex-direction: column; align-items: center; gap: 0; /* Vertical stack of nodes and arrows */
+      margin: 24px auto; max-width: 500px; /* Centred, constrained width */
     }
     .flow-node {
-      width: 100%;
-      background: rgba(143,11,19,0.25);
-      border: 1.5px solid rgba(143,11,19,0.5);
-      border-radius: 16px; padding: 14px 20px;
-      text-align: center;
-      font-family: var(--font-body); font-size: 0.92rem;
-      color: var(--cream); font-weight: 500;
-      position: relative; z-index: 1;
-      transition: background 0.3s;
+      width: 100%; background: rgba(143,11,19,0.25); border: 1.5px solid rgba(143,11,19,0.5); /* Crimson node */
+      border-radius: 16px; padding: 14px 20px; text-align: center; /* Rounded, centred text */
+      font-family: var(--font-body); font-size: 0.92rem; color: var(--cream); font-weight: 500;
+      position: relative; z-index: 1; transition: background 0.3s; /* Above arrows, smooth hover */
     }
-    .flow-node:hover { background: rgba(143,11,19,0.4); }
+    .flow-node:hover { background: rgba(143,11,19,0.4); } /* More opaque on hover */
     .flow-node.start, .flow-node.end {
-      background: rgba(56,15,23,0.7);
-      border-color: var(--crimson);
-      border-radius: 999px;
-      font-weight: 700; color: var(--cream);
+      background: rgba(56,15,23,0.7); border-color: var(--crimson); /* Dark background for start/end */
+      border-radius: 999px; font-weight: 700; color: var(--cream); /* Pill shape for start/end nodes */
     }
     .flow-node.decision {
-      background: rgba(76,79,84,0.5);
-      border-color: rgba(239,223,197,0.3);
-      border-radius: 8px;
-      font-style: italic;
+      background: rgba(76,79,84,0.5); border-color: rgba(239,223,197,0.3); /* Grey decision node */
+      border-radius: 8px; font-style: italic; /* Slightly rounded, italic text */
     }
     .flow-arrow {
-      width: 2px; height: 28px;
-      background: linear-gradient(to bottom, rgba(143,11,19,0.6), rgba(143,11,19,0.2));
-      position: relative;
-      display: flex; align-items: flex-end; justify-content: center;
+      width: 2px; height: 28px; /* Thin vertical line */
+      background: linear-gradient(to bottom, rgba(143,11,19,0.6), rgba(143,11,19,0.2)); /* Crimson gradient line */
+      position: relative; display: flex; align-items: flex-end; justify-content: center; /* For the arrowhead */
     }
     .flow-arrow::after {
-      content: '▼';
-      position: absolute; bottom: -6px;
-      color: rgba(143,11,19,0.7); font-size: 0.7rem;
+      content: \'\\25bc\'; /* Unicode down-pointing triangle as arrowhead */
+      position: absolute; bottom: -6px; color: rgba(143,11,19,0.7); font-size: 0.7rem;
     }
 
     /* ── Comparison table highlight ── */
-    .highlight-row td { background: rgba(143,11,19,0.12) !important; }
+    .highlight-row td { background: rgba(143,11,19,0.12) !important; } /* Highlighted row with crimson tint */
 
     /* ── Table scroll on mobile ── */
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; } /* Horizontal scroll for tables on small screens */
 
     @media (max-width: 768px) {
-      .fn-cards { grid-template-columns: 1fr 1fr; }
-      .pro-con  { grid-template-columns: 1fr; }
-      .char-grid { grid-template-columns: 1fr 1fr; }
+      .fn-cards { grid-template-columns: 1fr 1fr; } /* Function cards become 2-col on mobile */
+      .pro-con  { grid-template-columns: 1fr; } /* Pro/con stacks to 1-col on mobile */
+      .char-grid { grid-template-columns: 1fr 1fr; } /* Char grid becomes 2-col on mobile */
     }
     @media (max-width: 480px) {
-      .fn-cards  { grid-template-columns: 1fr; }
-      .char-grid { grid-template-columns: 1fr; }
+      .fn-cards  { grid-template-columns: 1fr; } /* Function cards become 1-col on small mobile */
+      .char-grid { grid-template-columns: 1fr; } /* Char grid becomes 1-col on small mobile */
     }
   </style>
 </head>
-<body>
+<body> <!-- All visible content starts here -->
 
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a>
-    <ul class="nav-menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="storage.html">Storage Devices</a></li>
-      <li><a href="instruction.html">Instruction Format</a></li>
-      <li><a href="feedback.html">Feedback</a></li>
+  <nav class="navbar"> <!-- Fixed frosted glass navbar -->
+    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a> <!-- Logo linking to home -->
+    <ul class="nav-menu"> <!-- Desktop horizontal nav menu -->
+      <li><a href="index.html">Home</a></li> <!-- Home link -->
+      <li><a href="storage.html">Storage Devices</a></li> <!-- Storage link — this page -->
+      <li><a href="instruction.html">Instruction Format</a></li> <!-- Instruction link -->
+      <li><a href="dns.html">DNS</a></li> <!-- DNS link — new topic -->
+      <li><a href="feedback.html">Feedback</a></li> <!-- Feedback link -->
     </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu"> <!-- Mobile hamburger button -->
+      <span></span><span></span><span></span> <!-- Three bars animated by JavaScript -->
     </button>
   </nav>
 
-  <nav class="nav-mobile-menu" id="mobileMenu">
-    <a href="index.html">Home</a>
-    <a href="storage.html">Storage Devices</a>
-    <a href="instruction.html">Instruction Format</a>
-    <a href="feedback.html">Feedback</a>
+  <nav class="nav-mobile-menu" id="mobileMenu"> <!-- Mobile dropdown menu -->
+    <a href="index.html">Home</a> <!-- Mobile home link -->
+    <a href="storage.html">Storage Devices</a> <!-- Mobile storage link -->
+    <a href="instruction.html">Instruction Format</a> <!-- Mobile instruction link -->
+    <a href="dns.html">DNS</a> <!-- Mobile DNS link -->
+    <a href="feedback.html">Feedback</a> <!-- Mobile feedback link -->
   </nav>
 
-  <div class="page-wrapper">
+  <div class="page-wrapper"> <!-- Content wrapper with top padding for navbar -->
 
     <!-- HERO BANNER -->
-    <div class="page-hero-wrap">
-      <img class="hero-banner" src="images/magnetic-tape.jpg.png" alt="Storage devices banner"/>
-      <div class="page-hero">
-        <div class="section-tag">Topic 01</div>
-        <h1>Secondary <span class="accent">Storage</span> Devices</h1>
-        <p style="max-width:580px; margin-top:12px; color:rgba(239,223,197,0.72);">
+    <div class="page-hero-wrap"> <!-- Hero banner with background image and gradient overlay -->
+      <img class="hero-banner" src="images/magnetic-tape.jpg.png" alt="Storage devices banner"/> <!-- Background image dimmed by CSS filter -->
+      <div class="page-hero"> <!-- Hero text on top of image -->
+        <div class="section-tag">Topic 01</div> <!-- Small label identifying this as Topic 1 -->
+        <h1>Secondary <span class="accent">Storage</span> Devices</h1> <!-- Page heading; Storage is crimson -->
+        <p style="max-width:580px; margin-top:12px; color:rgba(239,223,197,0.72);"> <!-- Hero description paragraph -->
           Persistent, non-volatile memory that keeps your data safe even when the power is off — the foundation of every computing system.
         </p>
       </div>
     </div>
 
-    <div class="content-area">
+    <div class="content-area"> <!-- Main content area — 1140px max, centred -->
 
-      <div class="section-header reveal" style="margin-top:48px;">
-        <div class="section-tag">Section 01</div>
-        <h2>Definition &amp; Core <span class="accent">Characteristics</span></h2>
+      <div class="section-header reveal" style="margin-top:48px;"> <!-- Section header with scroll reveal -->
+        <div class="section-tag">Section 01</div> <!-- Section label -->
+        <h2>Definition &amp; Core <span class="accent">Characteristics</span></h2> <!-- &amp; is HTML entity for & -->
       </div>
 
-      <div class="card reveal">
-        <span class="card-label">What is Secondary Storage?</span>
+      <div class="card reveal"> <!-- Glass card with scroll reveal animation -->
+        <span class="card-label">What is Secondary Storage?</span> <!-- Small crimson uppercase label -->
         <p>
           Secondary storage (also called <strong>auxiliary storage</strong>) is any storage medium that holds data permanently — even when the computer is switched off.
           Unlike primary memory (RAM), which is <strong>volatile</strong> and loses all data when powered down, secondary storage is <strong>non-volatile</strong>: the information remains intact regardless of the power state.
@@ -207,34 +188,34 @@
           Secondary storage is slower to access than primary memory, but this trade-off is acceptable for long-term data retention.
         </p>
 
-        <div class="char-grid" style="margin-top:24px;">
-          <div class="char-pill">
-            <span class="char-pill-icon">🔒</span>
-            <span class="char-pill-title">Non-Volatile</span>
-            <p class="char-pill-desc">Data is retained permanently even when the computer is turned off or loses power.</p>
+        <div class="char-grid" style="margin-top:24px;"> <!-- Responsive grid of characteristic pills -->
+          <div class="char-pill"> <!-- Individual characteristic pill -->
+            <span class="char-pill-icon">&#128274;</span> <!-- Lock emoji icon -->
+            <span class="char-pill-title">Non-Volatile</span> <!-- Pill title -->
+            <p class="char-pill-desc">Data is retained permanently even when the computer is turned off or loses power.</p> <!-- Pill description -->
           </div>
           <div class="char-pill">
-            <span class="char-pill-icon">📦</span>
+            <span class="char-pill-icon">&#128230;</span> <!-- Box emoji -->
             <span class="char-pill-title">High Capacity</span>
             <p class="char-pill-desc">Designed to hold large amounts of data, measured in gigabytes (GB) or terabytes (TB).</p>
           </div>
           <div class="char-pill">
-            <span class="char-pill-icon">🛡️</span>
+            <span class="char-pill-icon">&#128737;&#65039;</span> <!-- Shield emoji -->
             <span class="char-pill-title">Durable &amp; Reliable</span>
             <p class="char-pill-desc">Built to safeguard files, documents, and media safely over long periods of time.</p>
           </div>
           <div class="char-pill">
-            <span class="char-pill-icon">💰</span>
+            <span class="char-pill-icon">&#128176;</span> <!-- Money emoji -->
             <span class="char-pill-title">Economical</span>
             <p class="char-pill-desc">Much cheaper per gigabyte than primary memory (RAM), making it practical for large storage needs.</p>
           </div>
           <div class="char-pill">
-            <span class="char-pill-icon">🐢</span>
+            <span class="char-pill-icon">&#128034;</span> <!-- Turtle emoji -->
             <span class="char-pill-title">Slower Speed</span>
             <p class="char-pill-desc">Slower than RAM but still acceptable for reading/writing files, programs, and media.</p>
           </div>
           <div class="char-pill">
-            <span class="char-pill-icon">🔌</span>
+            <span class="char-pill-icon">&#128268;</span> <!-- Plug emoji -->
             <span class="char-pill-title">External / Internal</span>
             <p class="char-pill-desc">Can be built inside a computer or carried externally (USB drives, memory cards).</p>
           </div>
@@ -248,19 +229,19 @@
 
       <div class="card reveal">
         <span class="card-label">What does it do?</span>
-        <div class="fn-cards">
-          <div class="fn-card">
-            <span class="fn-card-icon">💾</span>
+        <div class="fn-cards"> <!-- Three-column function cards grid -->
+          <div class="fn-card"> <!-- Storage function card -->
+            <span class="fn-card-icon">&#128190;</span>
             <span class="fn-card-title">Storage</span>
             <p class="fn-card-desc">Saves documents, images, videos, operating systems, and software programs for long-term use.</p>
           </div>
-          <div class="fn-card">
-            <span class="fn-card-icon">🔄</span>
-            <span class="fn-card-title">Backup</span>
+          <div class="fn-card"> <!-- Backup function card -->
+            <span class="fn-card-icon">&#128260;</span>
+            <p class="fn-card-title">Backup</span>
             <p class="fn-card-desc">Creates copies of critical data to protect against accidental loss, hardware failure, or corruption.</p>
           </div>
-          <div class="fn-card">
-            <span class="fn-card-icon">📤</span>
+          <div class="fn-card"> <!-- Data Transfer function card -->
+            <span class="fn-card-icon">&#128372;</span>
             <span class="fn-card-title">Data Transfer</span>
             <p class="fn-card-desc">Portable versions like USB drives and memory cards make it easy to move data between devices.</p>
           </div>
@@ -278,28 +259,28 @@
           When you save a file, the CPU and storage controller work together through the following sequence:
         </p>
 
-        <div class="flowchart">
-          <div class="flow-node start">🖥️ User Saves a File</div>
+        <div class="flowchart"> <!-- Vertical step-by-step flowchart -->
+          <div class="flow-node start">&#128421;&#65039; User Saves a File</div> <!-- Start node — pill shaped -->
+          <div class="flow-arrow"></div> <!-- Arrow pointing down to next step -->
+          <div class="flow-node">CPU receives save instruction</div> <!-- Step 1 node -->
           <div class="flow-arrow"></div>
-          <div class="flow-node">CPU receives save instruction</div>
+          <div class="flow-node">Data is loaded into RAM (primary memory)</div> <!-- Step 2 node -->
           <div class="flow-arrow"></div>
-          <div class="flow-node">Data is loaded into RAM (primary memory)</div>
+          <div class="flow-node">OS calls the Storage Controller / Driver</div> <!-- Step 3 node -->
           <div class="flow-arrow"></div>
-          <div class="flow-node">OS calls the Storage Controller / Driver</div>
+          <div class="flow-node decision">Which type of storage device?</div> <!-- Decision node — italic grey box -->
           <div class="flow-arrow"></div>
-          <div class="flow-node decision">Which type of storage device?</div>
-          <div class="flow-arrow"></div>
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; width:100%; margin:4px 0;">
-            <div class="flow-node" style="font-size:0.8rem; padding:10px;">🧲 HDD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Magnetic head moves to sector</span></div>
-            <div class="flow-node" style="font-size:0.8rem; padding:10px;">⚡ SSD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Data written to NAND flash cell</span></div>
-            <div class="flow-node" style="font-size:0.8rem; padding:10px;">💿 Optical<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Laser burns pits on disc surface</span></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; width:100%; margin:4px 0;"> <!-- Three-column branch -->
+            <div class="flow-node" style="font-size:0.8rem; padding:10px;">&#129522; HDD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Magnetic head moves to sector</span></div> <!-- HDD branch -->
+            <div class="flow-node" style="font-size:0.8rem; padding:10px;">&#9889; SSD<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Data written to NAND flash cell</span></div> <!-- SSD branch -->
+            <div class="flow-node" style="font-size:0.8rem; padding:10px;">&#128191; Optical<br/><span style="font-size:0.7rem; color:rgba(239,223,197,0.5);">Laser burns pits on disc surface</span></div> <!-- Optical branch -->
           </div>
           <div class="flow-arrow"></div>
           <div class="flow-node">Data encoded in binary and written to physical medium</div>
           <div class="flow-arrow"></div>
           <div class="flow-node">File system index updated (e.g., NTFS, FAT32)</div>
           <div class="flow-arrow"></div>
-          <div class="flow-node start">✅ File Saved Successfully</div>
+          <div class="flow-node start">&#9989; File Saved Successfully</div> <!-- End node — pill shaped -->
         </div>
       </div>
 
@@ -309,11 +290,11 @@
       </div>
 
       <!-- ── A. MAGNETIC STORAGE ── -->
-      <div class="card reveal">
+      <div class="card reveal"> <!-- Glass card for Magnetic Storage section -->
         <span class="card-label">Type A — Magnetic Storage</span>
-        <h3 style="margin-bottom:16px;">🧲 Magnetic Storage</h3>
+        <h3 style="margin-bottom:16px;">&#129522; Magnetic Storage</h3>
 
-        <div class="grid-2" style="gap:28px; align-items:start;">
+        <div class="grid-2" style="gap:28px; align-items:start;"> <!-- Two-column grid: text left, images right -->
           <div>
             <p>
               Magnetic storage works by using <strong>magnetic fields</strong> and read/write heads to store data on spinning disks (platters) or on magnetic tape strips.
@@ -327,13 +308,13 @@
               <li><strong>Magnetic Tape</strong> — used in data centres for archiving</li>
             </ul>
 
-            <div class="pro-con">
-              <ul class="pro-list">
+            <div class="pro-con"> <!-- Pros and cons two-column grid -->
+              <ul class="pro-list"> <!-- Green advantages list -->
                 <li>Very high capacity</li>
                 <li>Budget-friendly (low cost/GB)</li>
                 <li>Good for bulk data storage</li>
               </ul>
-              <ul class="con-list">
+              <ul class="con-list"> <!-- Red disadvantages list -->
                 <li>Has moving parts — prone to damage from shock</li>
                 <li>Generates heat during operation</li>
                 <li>Slower than SSD</li>
@@ -341,12 +322,12 @@
             </div>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:16px;">
-            <div class="device-img-box">
-              <img src="images/hdd.jpg.png" alt="Hard Disk Drive" loading="lazy"/>
-              <span class="img-label">Hard Disk Drive (HDD)</span>
+          <div style="display:flex; flex-direction:column; gap:16px;"> <!-- Right column with device images -->
+            <div class="device-img-box"> <!-- HDD image card -->
+              <img src="images/hdd.jpg.png" alt="Hard Disk Drive" loading="lazy"/> <!-- lazy loading improves page speed -->
+              <span class="img-label">Hard Disk Drive (HDD)</span> <!-- Floating pill label over image -->
             </div>
-            <div class="device-img-box">
+            <div class="device-img-box"> <!-- Magnetic tape image card -->
               <img src="images/magnetic-tape.jpg.png" alt="Magnetic Tape" loading="lazy"/>
               <span class="img-label">Magnetic Tape (LTO Cartridge)</span>
             </div>
@@ -354,9 +335,9 @@
         </div>
 
         <h4 style="color:var(--cream-mid); margin: 24px 0 12px;">HDD — Key Specifications</h4>
-        <div class="table-scroll">
-          <table class="data-table">
-            <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <div class="table-scroll"> <!-- Horizontal scroll wrapper for table on mobile -->
+          <table class="data-table"> <!-- Styled comparison table -->
+            <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead> <!-- Table headers -->
             <tbody>
               <tr><td>Capacity</td><td>500 GB – 20 TB</td><td>Consumer to enterprise range</td></tr>
               <tr><td>Read Speed</td><td>80 – 160 MB/s</td><td>Sequential read</td></tr>
@@ -372,7 +353,7 @@
       <!-- ── B. SOLID-STATE STORAGE ── -->
       <div class="card reveal">
         <span class="card-label">Type B — Solid-State Storage (Flash Memory)</span>
-        <h3 style="margin-bottom:16px;">⚡ Solid-State Storage</h3>
+        <h3 style="margin-bottom:16px;">&#9889; Solid-State Storage</h3>
 
         <div class="grid-2" style="gap:28px; align-items:start;">
           <div>
@@ -428,7 +409,7 @@
               <tr><td>Write Speed</td><td>~520 MB/s</td><td>3,000 – 6,500 MB/s</td></tr>
               <tr><td>Interface</td><td>SATA III</td><td>PCIe 3.0 / 4.0</td></tr>
               <tr><td>Form Factor</td><td>2.5" / M.2</td><td>M.2 / PCIe slot</td></tr>
-              <tr class="highlight-row"><td>Cost per GB</td><td>~$0.06</td><td>~$0.08 – $0.15</td></tr>
+              <tr class="highlight-row"><td>Cost per GB</td><td>~$0.06</td><td>~$0.08 – $0.15</td></tr> <!-- highlight-row adds crimson tint to this row -->
             </tbody>
           </table>
         </div>
@@ -437,7 +418,7 @@
       <!-- ── C. OPTICAL STORAGE ── -->
       <div class="card reveal">
         <span class="card-label">Type C — Optical Storage</span>
-        <h3 style="margin-bottom:16px;">💿 Optical Storage</h3>
+        <h3 style="margin-bottom:16px;">&#128191; Optical Storage</h3>
 
         <div class="grid-2" style="gap:28px; align-items:start;">
           <div>
@@ -522,42 +503,43 @@
         </div>
       </div>
 
-      <hr class="divider"/>
+      <hr class="divider"/> <!-- Horizontal section divider -->
 
       <div class="section-header reveal">
         <div class="section-tag">Test Yourself</div>
         <h2>Storage Devices <span class="accent">Quiz</span></h2>
       </div>
 
-      <div class="quiz-section reveal">
+      <div class="quiz-section reveal"> <!-- Quiz container with scroll reveal -->
         <p style="color:rgba(239,223,197,0.65); margin-bottom:24px;">
           7 questions based on the content above. Select an answer to see the explanation, then press Next.
         </p>
-        <div id="storageQuiz"></div>
+        <div id="storageQuiz"></div> <!-- Empty div — JavaScript builds the entire quiz inside here -->
       </div>
 
-      <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal">
-        <a href="index.html" class="btn btn-outline">← Home</a>
-        <a href="instruction.html" class="btn btn-primary">Instruction Format →</a>
+      <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal"> <!-- Navigation buttons at bottom -->
+        <a href="index.html" class="btn btn-outline">← Home</a> <!-- Back to home -->
+        <a href="instruction.html" class="btn btn-primary">Instruction Format →</a> <!-- Forward to next topic -->
       </div>
 
     </div><!-- /content-area -->
 
-    <footer>
-      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a>
-      <ul class="foot-links">
+    <footer> <!-- Page footer -->
+      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a> <!-- Footer logo -->
+      <ul class="foot-links"> <!-- Footer navigation -->
         <li><a href="index.html">Home</a></li>
         <li><a href="storage.html">Storage Devices</a></li>
         <li><a href="instruction.html">Instruction Format</a></li>
+        <li><a href="dns.html">DNS</a></li> <!-- DNS link in footer -->
         <li><a href="feedback.html">Feedback</a></li>
       </ul>
-      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p>
+      <p>&#169; VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p> <!-- Copyright with auto year -->
     </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js"></script> <!-- Shared JS file -->
   <script>
-    initQuiz('storageQuiz', [
+    initQuiz('storageQuiz', [ // Calls the shared quiz engine with Storage Devices questions
       { question: "What does 'non-volatile' mean in the context of secondary storage?", options: ["Data is erased when power is removed","Data is retained permanently even without power","The storage device cannot be formatted","The device runs without electricity"], answer: 1, explanation: "Non-volatile means data persists even when power is off. All secondary storage types share this characteristic." },
       { question: "Which component inside an HDD physically reads and writes data on the magnetic platters?", options: ["Spindle Motor","Controller Board","Read/Write Head","Actuator Arm"], answer: 2, explanation: "The read/write head hovers just above the spinning platters and uses magnetic fields to read and write binary data." },
       { question: "What technology do SSDs use to store data?", options: ["Spinning magnetic platters","Laser beams on reflective discs","NAND flash memory chips","Phase-change material"], answer: 2, explanation: "SSDs use NAND flash memory — integrated circuit assemblies with no moving parts that store data electronically in transistor cells." },
@@ -569,6 +551,3 @@
   </script>
 </body>
 </html>
-
-
-
