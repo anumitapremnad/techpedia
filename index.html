@@ -1,131 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta name="color-scheme" content="dark">
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TechPedia | Home</title>
-  <link rel="stylesheet" href="style.css"/>
+<!DOCTYPE html> <!-- Declares this as an HTML5 document — must be first line -->
+<html lang="en"> <!-- Root element; lang=en tells browsers the page is in English -->
+<head> <!-- Contains page metadata — not visible to users -->
+  <meta name="color-scheme" content="dark"> <!-- Forces dark mode for browser UI elements like scrollbars -->
+  <meta charset="UTF-8"/> <!-- Sets character encoding so all characters and emojis display correctly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Makes page responsive on mobile -->
+  <title>TechPedia | Home</title> <!-- Text shown in the browser tab -->
+  <link rel="stylesheet" href="style.css"/> <!-- Links the external shared CSS file -->
 </head>
-<body>
+<body> <!-- All visible page content goes inside body -->
 
   <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a>
-    <ul class="nav-menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="storage.html">Storage Devices</a></li>
-      <li><a href="instruction.html">Instruction Format</a></li>
-      <li><a href="dns.html">DNS</a></li>
-      <li><a href="feedback.html">Feedback</a></li>
+  <nav class="navbar"> <!-- Fixed frosted glass navigation bar at top of page -->
+    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a> <!-- Logo — Tech is cream, Pedia is crimson via the span -->
+    <ul class="nav-menu"> <!-- Desktop horizontal nav menu — hidden on mobile via CSS -->
+      <li><a href="index.html">Home</a></li> <!-- Nav link to home page -->
+      <li><a href="storage.html">Storage Devices</a></li> <!-- Nav link to Storage Devices page -->
+      <li><a href="instruction.html">Instruction Format</a></li> <!-- Nav link to Instruction Format page -->
+      <li><a href="dns.html">DNS</a></li> <!-- Nav link to DNS page — new topic added -->
+      <li><a href="feedback.html">Feedback</a></li> <!-- Nav link to Feedback page -->
     </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu"> <!-- Hamburger button — only visible on mobile; aria-label for screen readers -->
+      <span></span><span></span><span></span> <!-- Three bars animated into X by JavaScript when clicked -->
     </button>
   </nav>
-  <nav class="nav-mobile-menu" id="mobileMenu">
-    <a href="index.html">Home</a>
-    <a href="storage.html">Storage Devices</a>
-    <a href="instruction.html">Instruction Format</a>
-    <a href="dns.html">DNS</a>
-    <a href="feedback.html">Feedback</a>
+  <nav class="nav-mobile-menu" id="mobileMenu"> <!-- Mobile dropdown menu — JavaScript toggles open/closed -->
+    <a href="index.html">Home</a> <!-- Mobile link to home -->
+    <a href="storage.html">Storage Devices</a> <!-- Mobile link to storage page -->
+    <a href="instruction.html">Instruction Format</a> <!-- Mobile link to instruction page -->
+    <a href="dns.html">DNS</a> <!-- Mobile link to DNS page -->
+    <a href="feedback.html">Feedback</a> <!-- Mobile link to feedback page -->
   </nav>
 
-  <div class="page-wrapper">
+  <div class="page-wrapper"> <!-- Wraps all content; padding-top:70px clears the fixed navbar -->
 
     <!-- HERO -->
-    <section style="position:relative; overflow:hidden;">
-      <div class="hero">
-        <div class="hero-content">
-          <div class="hero-eyebrow">✦ System & CPU Architecture</div>
-          <h1>Learn <span class="accent">Computing</span><br/>Fundamentals</h1>
-          <p class="hero-desc">Explore secondary storage devices and CPU instruction formats through clean, interactive lessons — crafted for students.</p>
-          <div class="hero-btns">
-            <a href="storage.html" class="btn btn-primary">Storage Devices →</a>
-            <a href="instruction.html" class="btn btn-outline">Instruction Format →</a>
+    <section style="position:relative; overflow:hidden;"> <!-- Hero section; relative for layered children; overflow hidden clips blob -->
+      <div class="hero"> <!-- Flex container — text left, blob image right; stacks vertically on mobile -->
+        <div class="hero-content"> <!-- Left side — eyebrow label, heading, description, buttons -->
+          <div class="hero-eyebrow">✦ System & CPU Architecture</div> <!-- Small pill badge above heading — fades up with CSS animation -->
+          <h1>Learn <span class="accent">Computing</span><br/>Fundamentals</h1> <!-- Main heading; .accent makes Computing crimson; br creates line break -->
+          <p class="hero-desc">Explore secondary storage devices and CPU instruction formats through clean, interactive lessons — crafted for students.</p> <!-- Hero description — fades up with animation delay -->
+          <div class="hero-btns"> <!-- Row of call-to-action buttons -->
+            <a href="storage.html" class="btn btn-primary">Storage Devices →</a> <!-- Primary crimson button to storage page -->
+            <a href="instruction.html" class="btn btn-outline">Instruction Format →</a> <!-- Outline glass button to instruction page -->
             <a href="dns.html" class="btn btn-outline">DNS→</a>
           </div>
         </div>
-        <div class="hero-visual">
-          <div class="hero-blob">
-            <img src="images/home.jpg.png" alt="Storage devices" />
+        <div class="hero-visual"> <!-- Right side container for floating blob image -->
+          <div class="hero-blob"> <!-- Blob shape with CSS blobFloat keyframe animation — morphs while floating -->
+            <img src="images/home.jpg.png" alt="Storage devices" /> <!-- Hero image inside blob; alt text for accessibility -->
           </div>
         </div>
       </div>
     </section>
 
     <!-- NAV CARDS -->
-    <div class="content-area">
-      <div class="section-header reveal">
-        <div class="section-tag">Topics</div>
-        <h2>What's Inside</h2>
+    <div class="content-area"> <!-- Main content area — max 1140px, centred with horizontal padding -->
+      <div class="section-header reveal"> <!-- Section header with scroll reveal animation -->
+        <div class="section-tag">Topics</div> <!-- Small crimson uppercase label with line before it -->
+        <h2>What's Inside</h2> <!-- Section heading -->
       </div>
 
-      <div class="nav-cards">
-        <a href="storage.html" class="nav-card reveal delay-1">
-          <span class="nav-card-icon">💾</span>
-          <div class="nav-card-title">Secondary Storage Devices</div>
-          <p class="nav-card-desc">Hard disks, SSDs, optical drives, flash memory — how data is stored permanently. Includes a quiz.</p>
+      <div class="nav-cards"> <!-- Responsive grid of topic cards — auto-fits to screen width -->
+        <a href="storage.html" class="nav-card reveal delay-1"> <!-- Storage Devices card; reveal with 0.1s delay -->
+          <span class="nav-card-icon">💾</span> <!-- Emoji icon for card -->
+          <div class="nav-card-title">Secondary Storage Devices</div> <!-- Card title in display font -->
+          <p class="nav-card-desc">Hard disks, SSDs, optical drives, flash memory — how data is stored permanently. Includes a quiz.</p> <!-- Card description -->
         </a>
-        <a href="instruction.html" class="nav-card reveal delay-2">
-          <span class="nav-card-icon">⚙️</span>
-          <div class="nav-card-title">Instruction Format</div>
-          <p class="nav-card-desc">Opcode, operands, addressing modes, zero to three address instructions. Includes a quiz.</p>
+        <a href="instruction.html" class="nav-card reveal delay-2"> <!-- Instruction Format card; reveal with 0.2s delay -->
+          <span class="nav-card-icon">⚙️</span> <!-- Emoji icon -->
+          <div class="nav-card-title">Instruction Format</div> <!-- Card title -->
+          <p class="nav-card-desc">Opcode, operands, addressing modes, zero to three address instructions. Includes a quiz.</p> <!-- Description -->
         </a>
-        <a href="dns.html" class="nav-card reveal delay-3">
-          <span class="nav-card-icon">🌐</span>
-          <div class="nav-card-title">DNS</div>
-          <p class="nav-card-desc">Domain Name System — how domain names translate to IP addresses, DNS hierarchy, record types. Includes a quiz.</p>
+        <a href="dns.html" class="nav-card reveal delay-3"> <!-- DNS card — new topic; reveal with 0.3s delay -->
+          <span class="nav-card-icon">🌐</span> <!-- Globe emoji icon for DNS -->
+          <div class="nav-card-title">DNS</div> <!-- Card title -->
+          <p class="nav-card-desc">Domain Name System — how domain names translate to IP addresses, DNS hierarchy, record types. Includes a quiz.</p> <!-- Description -->
         </a>
-        <a href="feedback.html" class="nav-card reveal">
-          <span class="nav-card-icon">💬</span>
-          <div class="nav-card-title">Feedback</div>
-          <p class="nav-card-desc">Share your thoughts on the content. Your input helps improve TechPedia.</p>
+        <a href="feedback.html" class="nav-card reveal"> <!-- Feedback card; no delay -->
+          <span class="nav-card-icon">💬</span> <!-- Emoji icon -->
+          <div class="nav-card-title">Feedback</div> <!-- Card title -->
+          <p class="nav-card-desc">Share your thoughts on the content. Your input helps improve TechPedia.</p> <!-- Description -->
         </a>
       </div>
 
-      <hr class="divider"/>
+      <hr class="divider"/> <!-- Horizontal rule used as visual section separator -->
 
       <!-- About section -->
-      <div class="section-header reveal">
-        <div class="section-tag">About</div>
-        <h2>About This Site</h2>
+      <div class="section-header reveal"> <!-- Section header with scroll reveal -->
+        <div class="section-tag">About</div> <!-- Small label -->
+        <h2>About This Site</h2> <!-- Section heading -->
       </div>
 
-      <div class="grid-2 reveal">
-        <div class="card">
-          <span class="card-label">Purpose</span>
-          <h3>A Group Project</h3>
-          <p>TechPedia is a micro project built to explore and explain core computer science concepts through a clean, interactive web application. Built purely with HTML, CSS, and JavaScript.</p>
-          <p>Navigate to any topic using the menu above or the cards below. Each topic page ends with a short quiz to test your understanding.</p>
+      <div class="grid-2 reveal"> <!-- Two-column CSS Grid with scroll reveal animation -->
+        <div class="card"> <!-- Glass card for Purpose -->
+          <span class="card-label">Purpose</span> <!-- Small crimson uppercase card label -->
+          <h3>A Group Project</h3> <!-- Card heading -->
+          <p>TechPedia is a micro project built to explore and explain core computer science concepts through a clean, interactive web application. Built purely with HTML, CSS, and JavaScript.</p> <!-- Card body -->
+          <p>Navigate to any topic using the menu above or the cards below. Each topic page ends with a short quiz to test your understanding.</p> <!-- Second paragraph -->
         </div>
-        <div class="card">
-          <span class="card-label">Topics Covered</span>
-          <h3>Two Core Topics</h3>
-          <ul>
-            <li>Secondary Storage Devices</li>
-            <li>Instruction Format</li>
-            <li>DNS (Domain Name System)</li>
+        <div class="card"> <!-- Glass card for Topics Covered -->
+          <span class="card-label">Topics Covered</span> <!-- Small crimson label -->
+          <h3>Three Core Topics</h3> <!-- Updated to Three since DNS added -->
+          <ul> <!-- List of topics -->
+            <li>Secondary Storage Devices</li> <!-- Topic 1 -->
+            <li>Instruction Format</li> <!-- Topic 2 -->
+            <li>DNS (Domain Name System)</li> <!-- Topic 3 — new addition -->
           </ul>
         </div>
       </div>
 
     </div><!-- /content-area -->
 
-    <footer>
-      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a>
-      <ul class="foot-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="storage.html">Storage Devices</a></li>
-        <li><a href="instruction.html">Instruction Format</a></li>
-        <li><a href="dns.html">DNS</a></li>
-      <li><a href="feedback.html">Feedback</a></li>
+    <footer> <!-- Page footer — appears on all pages -->
+      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a> <!-- Footer logo linking to home -->
+      <ul class="foot-links"> <!-- Horizontal footer navigation links -->
+        <li><a href="index.html">Home</a></li> <!-- Footer link to home -->
+        <li><a href="storage.html">Storage Devices</a></li> <!-- Footer link to storage -->
+        <li><a href="instruction.html">Instruction Format</a></li> <!-- Footer link to instruction -->
+        <li><a href="dns.html">DNS</a></li> <!-- Footer link to DNS — new addition -->
+        <li><a href="feedback.html">Feedback</a></li> <!-- Footer link to feedback -->
       </ul>
-      <p>Created By Anumita, Amrutha P Sasidharan, Abin Anto M &amp; Rufus K Mathew Joseph</p>
-      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p>
+      <p>Created By Anumita, Amrutha P Sasidharan, Abin Anto M &amp; Rufus K Mathew Joseph</p> <!-- Team credits; &amp; is HTML entity for & -->
+      <p>&#169; VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p> <!-- Copyright; span filled by JavaScript with current year -->
     </footer>
 
   </div><!-- /page-wrapper -->
-  <script src="script.js"></script>
+  <script src="script.js"></script> <!-- External JS file — placed at bottom so HTML loads first -->
 </body>
 </html>
