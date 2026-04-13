@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="dark">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | TechPedia</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Hero banner ── */
+    .page-hero-wrap {
+      position: relative; overflow: hidden;
+      background: var(--burgundy);
+      min-height: 280px;
+      display: flex; align-items: flex-end;
+    }
+    .page-hero-wrap::after {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(56,15,23,0.3) 0%, rgba(37,43,43,1) 100%);
+    }
+    .page-hero-wrap .page-hero { position: relative; z-index: 2; width: 100%; }
+
+    /* ── Team member cards ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .team-card {
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .team-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--crimson), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .team-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      background: rgba(239,223,197,0.1);
+    }
+    .team-card:hover::before { transform: scaleX(1); }
+
+    .team-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--crimson), var(--burgundy));
+      border: 3px solid rgba(143,11,19,0.5);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 2rem;
+      box-shadow: 0 4px 20px rgba(143,11,19,0.3);
+    }
+    .team-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--cream); margin-bottom: 6px;
+    }
+    .team-role {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--crimson); margin-bottom: 14px;
+      display: block;
+    }
+    .team-email {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: rgba(239,223,197,0.6);
+      background: rgba(239,223,197,0.07);
+      border: 1px solid rgba(239,223,197,0.12);
+      border-radius: 999px;
+      padding: 6px 14px;
+      display: inline-block;
+      word-break: break-all;
+    }
+    .team-rollno {
+      font-size: 0.78rem;
+      color: rgba(239,223,197,0.45);
+      margin-top: 10px;
+      display: block;
+    }
+
+    /* ── Website intro cards ── */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .intro-pill {
+      background: rgba(143,11,19,0.18);
+      border: 1px solid rgba(143,11,19,0.3);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .intro-pill:hover {
+      background: rgba(143,11,19,0.28);
+      transform: translateY(-3px);
+    }
+    .intro-pill-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+    .intro-pill-title {
+      font-family: var(--font-display);
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--cream); margin-bottom: 6px; display: block;
+    }
+    .intro-pill-desc {
+      font-size: 0.82rem;
+      color: rgba(239,223,197,0.6);
+      margin-bottom: 0; line-height: 1.5;
+    }
+
+    /* ── Tech stack badges ── */
+    .tech-badges {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 16px;
+    }
+    .tech-badge {
+      background: rgba(56,15,23,0.6);
+      border: 1px solid rgba(143,11,19,0.4);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: 0.78rem; font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .intro-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .intro-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">Tech<span>Pedia</span></a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="storage.html">Storage Devices</a></li>
+      <li><a href="instruction.html">Instruction Format</a></li>
+      <li><a href="dns.html">DNS</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <nav class="nav-mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="storage.html">Storage Devices</a>
+    <a href="instruction.html">Instruction Format</a>
+    <a href="dns.html">DNS</a>
+    <a href="feedback.html">Feedback</a>
+    <a href="about.html">About Us</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- HERO BANNER -->
+    <div class="page-hero-wrap">
+      <div class="page-hero">
+        <div class="section-tag">Who We Are</div>
+        <h1>About <span class="accent">TechPedia</span></h1>
+        <p style="max-width:580px; margin-top:12px; color:rgba(239,223,197,0.72);">
+          Meet the team behind TechPedia — a group of S2 AIML students who built this interactive educational website from scratch using HTML, CSS, and JavaScript.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- ═══════════════════════
+           ABOUT THE WEBSITE
+           ═══════════════════════ -->
+      <div class="section-header reveal" style="margin-top:48px;">
+        <div class="section-tag">The Project</div>
+        <h2>About <span class="accent">This Website</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">Introduction</span>
+        <p>
+          TechPedia is an interactive, multi-page educational website developed as a micro project for the
+          <strong>Foundations of Computing (GXEST203)</strong> course at
+          <strong>Vidya Academy of Science and Technology</strong>, under
+          <strong>APJ Abdul Kalam Technological University (KTU)</strong>, 2024 scheme.
+        </p>
+        <p>
+          The website covers three core topics from the KTU S2 syllabus —
+          <strong>Secondary Storage Devices</strong>, <strong>Instruction Format</strong>, and
+          <strong>DNS (Domain Name System)</strong> — through structured content, visual diagrams,
+          flowcharts, comparison tables, and interactive quizzes.
+        </p>
+        <p>
+          Built entirely with <strong>HTML5, CSS3, and vanilla JavaScript</strong> — no frameworks,
+          no backend, no database. Everything runs directly in the browser.
+        </p>
+
+        <div class="intro-grid" style="margin-top:24px;">
+          <div class="intro-pill">
+            <span class="intro-pill-icon">📄</span>
+            <span class="intro-pill-title">5 Pages</span>
+            <p class="intro-pill-desc">Home, Storage, Instruction, DNS, Feedback</p>
+          </div>
+          <div class="intro-pill">
+            <span class="intro-pill-icon">🧠</span>
+            <span class="intro-pill-title">3 Topics</span>
+            <p class="intro-pill-desc">Storage Devices, Instruction Format, DNS</p>
+          </div>
+          <div class="intro-pill">
+            <span class="intro-pill-icon">❓</span>
+            <span class="intro-pill-title">21 Quiz Questions</span>
+            <p class="intro-pill-desc">7 questions per topic with instant feedback</p>
+          </div>
+          <div class="intro-pill">
+            <span class="intro-pill-icon">📱</span>
+            <span class="intro-pill-title">Fully Responsive</span>
+            <p class="intro-pill-desc">Works on mobile, tablet, and desktop</p>
+          </div>
+        </div>
+
+        <h4 style="color:var(--cream-mid); margin:24px 0 12px;">Technologies Used</h4>
+        <div class="tech-badges">
+          <span class="tech-badge">HTML5</span>
+          <span class="tech-badge">CSS3</span>
+          <span class="tech-badge">JavaScript</span>
+          <span class="tech-badge">CSS Grid</span>
+          <span class="tech-badge">Flexbox</span>
+          <span class="tech-badge">CSS Animations</span>
+          <span class="tech-badge">IntersectionObserver API</span>
+          <span class="tech-badge">DOM Manipulation</span>
+          <span class="tech-badge">Google Fonts</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════
+           PROJECT DETAILS
+           ═══════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Details</div>
+        <h2>Project <span class="accent">Information</span></h2>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <span class="card-label">Course Details</span>
+          <ul style="list-style:none; padding:0;">
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">Course</span> &nbsp;Foundations of Computing</li>
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">Code</span> &nbsp;GXEST203</li>
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">Semester</span> &nbsp;S2 — 2025-2026</li>
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">Scheme</span> &nbsp;KTU 2024</li>
+            <li style="padding:8px 0;"><span style="color:var(--crimson); font-weight:600;">Batch</span> &nbsp;2025–2029</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="card-label">Institution</span>
+          <ul style="list-style:none; padding:0;">
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">College</span> &nbsp;Vidya Academy of Science and Technology</li>
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">Department</span> &nbsp;Artificial Intelligence &amp; Machine Learning</li>
+            <li style="padding:8px 0; border-bottom:1px solid rgba(239,223,197,0.08);"><span style="color:var(--crimson); font-weight:600;">University</span> &nbsp;APJ Abdul Kalam Technological University</li>
+            <li style="padding:8px 0;"><span style="color:var(--crimson); font-weight:600;">Location</span> &nbsp;Thrissur, Kerala</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════
+           TEAM MEMBERS
+           ═══════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">The Team</div>
+        <h2>Meet the <span class="accent">Team</span></h2>
+      </div>
+
+      <div class="team-grid reveal">
+
+        <!-- MEMBER 1 -->
+        <div class="team-card">
+          <div class="team-avatar">👩‍💻</div>
+          <div class="team-name">Anumita</div> 
+          <span class="team-role">Team Member</span>
+          <div class="team-email"><a href="mailto:tl25btai0092@vidyaacademy.ac.in">tl25btai0092@vidyaacademy.ac.in</a></div> 
+          <span class="team-rollno">Roll No: 24</span> 
+        </div>
+
+        <!-- MEMBER 2 -->
+        <div class="team-card">
+          <div class="team-avatar">👩‍💻</div>
+          <div class="team-name">Amrutha P Sasidharan</div> 
+          <span class="team-role">Team Member</span>
+          <div class="team-email"><a href="mailto:tl25btai0433@vidyaacademy.ac.in">tl25btai0433@vidyaacademy.ac.in</a></div> 
+          <span class="team-rollno">Roll No: 19</span> 
+        </div>
+
+        <!-- MEMBER 3 -->
+        <div class="team-card">
+          <div class="team-avatar">👨‍💻</div>
+          <div class="team-name">Abin Anto M</div> 
+          <span class="team-role">Team Member</span>
+          <div class="team-email"><a href="mailto:tl25btai0363@vidyaacademy.ac.in">tl25btai0363@vidyaacademy.ac.in</a></div> 
+          <span class="team-rollno">Roll No: 6</span>
+        </div>
+
+        <!-- MEMBER 4 -->
+        <div class="team-card">
+          <div class="team-avatar">👨‍💻</div>
+          <div class="team-name">Rufus K Mathew Joseph</div> 
+          <span class="team-role">Team Member</span>
+          <div class="team-email"><a href="mailto:tl25btai0448@vidyaacademy.ac.in">tl25btai0448@vidyaacademy.ac.in</a></div> 
+          <span class="team-rollno">Roll No: 52</span> 
+        </div>
+
+      </div>
+
+      <!-- ═══════════════════════
+           ACKNOWLEDGEMENT
+           ═══════════════════════ -->
+      <div class="section-header reveal" style="margin-top:44px;">
+        <div class="section-tag">Acknowledgement</div>
+        <h2>Special <span class="accent">Thanks</span></h2>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-label">Guided by</span>
+        <p>
+          We would like to express our sincere gratitude to our course instructor
+          <strong>Bianka Thomas</strong>, Assistant Professor, Department of AIML,
+          Vidya Academy of Science and Technology, for her guidance and support
+          throughout this micro project.
+        </p>
+        <p style="margin-bottom:0;">
+          This project was developed as part of the <strong>Foundations of Computing (GXEST203)</strong>
+          micro project requirement for Semester II, Academic Year 2025–2029.
+        </p>
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;" class="reveal">
+        <a href="feedback.html" class="btn btn-primary">← Feedback </a>
+      </div>
+
+    </div><!-- /content-area -->
+
+    <footer>
+      <a href="index.html" class="foot-logo">Tech<span>Pedia</span></a>
+      <ul class="foot-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="storage.html">Storage Devices</a></li>
+        <li><a href="instruction.html">Instruction Format</a></li>
+        <li><a href="dns.html">DNS</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <p>© VIDYA ACADEMY OF SCIENCE AND TECHNOLOGY, <span id="year"></span></p>
+    </footer>
+
+  </div><!-- /page-wrapper -->
+  <script src="script.js"></script>
+</body>
+</html>
